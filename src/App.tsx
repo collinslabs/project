@@ -7,9 +7,11 @@ import { Cart } from './pages/Cart';
 import { Admin } from './pages/Admin';
 import { Checkout } from './pages/Checkout';
 import { OrderSuccess } from './pages/OrderSuccess';
-import ProfilePage from './pages/ProfilePage';
 import { SignUp } from './components/SignUp';
 import { SignIn } from './components/SignIn';
+import { ForgotPassword } from './components/FogortPasword';
+import AccountSettings from './pages/AccountSettings';
+
 
 function App() {
   return (
@@ -21,9 +23,10 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/account" element={<ProfilePage/>} />
+          <Route path="/account/settings" element={<AccountSettings/>} />
           <Route path="/signup" element={<SignUp/>} />
           <Route path="/signin"element={<SignIn/>} />
+          <Route path="/forgot-password" element={<ForgotPassword/>} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />

@@ -17,19 +17,31 @@ const PRODUCTS = {
       'Comfortable fit'
     ]
   },
-  // Add more products
+  // Add more products as needed
 };
 
 export function ProductDetail() {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore((state) => state.addItem);
-  
+
   const product = PRODUCTS[id as keyof typeof PRODUCTS];
-  
+
   if (!product) {
     return <div className="text-center py-24">Product not found</div>;
   }
+
+  const handleAddToCart = () => {
+    for (let i = 0; i < quantity; i++) {
+      addItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        quantity: 1,
+      });
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-24">
@@ -45,30 +57,25 @@ export function ProductDetail() {
           <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
           <div className="flex items-center mt-4">
             {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className="h-5 w-5 text-yellow-400 fill-current"
-              />
+              <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
             ))}
             <span className="ml-2 text-gray-600">(4.8/5)</span>
           </div>
-          <p className="mt-4 text-2xl font-bold text-gray-900">
-            ${product.price}
-          </p>
+          <p className="mt-4 text-2xl font-bold text-gray-900">${product.price}</p>
           <p className="mt-4 text-gray-600">{product.description}</p>
-          
+
           <div className="mt-6">
             <h3 className="text-lg font-semibold">Key Features</h3>
             <ul className="mt-2 space-y-2">
               {product.features.map((feature, index) => (
                 <li key={index} className="flex items-center">
-                  <span className="h-2 w-2 bg-blue-600 rounded-full mr-2" />
+                  <span className="h-2 w-2 bg-pink-600 rounded-full mr-2" />
                   {feature}
                 </li>
               ))}
             </ul>
           </div>
-          
+
           <div className="mt-8 space-y-4">
             <div className="flex items-center">
               <label htmlFor="quantity" className="mr-4">Quantity:</label>
@@ -85,20 +92,10 @@ export function ProductDetail() {
                 ))}
               </select>
             </div>
-            
+
             <button
-              onClick={() => {
-                for (let i = 0; i < quantity; i++) {
-                  addItem({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    image: product.image,
-                    quantity: 1
-                  });
-                }
-              }}
-              className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+              onClick={handleAddToCart}
+              className="w-full bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors"
             >
               Add to Cart
             </button>

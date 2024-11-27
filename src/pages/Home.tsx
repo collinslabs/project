@@ -1,19 +1,62 @@
 import { ArrowRight, ShoppingBag, Truck, Shield, Mail, Facebook, Twitter, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-interface Review {
-  id: number;
-  username: string;
-  rating: number; // Rating out of 5
-  comment: string;
-}
 
 interface FormData {
   name: string;
   email: string;
   message: string;
 }
+interface Deal {
+  id: number;
+  title: string;
+  price: number;
+  originalPrice: number;
+  discount: number;
+  image: string;
+  category: string;
+}
+
+const deals: Deal[] = [
+  {
+    id: 1,
+    title: "Wireless Noise-Canceling Headphones",
+    price: 199.99,
+    originalPrice: 349.99,
+    discount: 43,
+    image: "/headphones.jpg",
+    category: "Electronics"
+  },
+  {
+    id: 2,
+    title: "Smart Fitness Watch",
+    price: 149.99,
+    originalPrice: 249.99,
+    discount: 40,
+    image: "/watch.jpg",
+    category: "Wearables"
+  },
+  {
+    id: 3,
+    title: "4K Ultra HD Smart TV - 55\"",
+    price: 499.99,
+    originalPrice: 799.99,
+    discount: 38,
+    image: "/tv.jpg",
+    category: "Electronics"
+  },
+  {
+    id: 4,
+    title: "Robot Vacuum Cleaner",
+    price: 299.99,
+    originalPrice: 499.99,
+    discount: 40,
+    image: "/vacuum.jpg",
+    category: "Home"
+  }
+];
 
 const CATEGORIES = [
   {
@@ -66,11 +109,6 @@ const slides = [
   },
 ];
 
-const reviews: Review[] = [
-  { id: 1, username: 'Jane Doe', rating: 5, comment: 'Excellent service! Highly recommend.' },
-  { id: 2, username: 'John Smith', rating: 4, comment: 'Great experience, but room for improvement.' },
-  { id: 3, username: 'Emily Johnson', rating: 3, comment: 'Average experience, expected better.' },
-];
 
 const Home: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({ name: '', email: '', message: '' });
@@ -86,6 +124,8 @@ const Home: React.FC = () => {
       setFormErrors((prev) => ({ ...prev, email: isValid ? '' : 'Invalid email address' }));
     }
   };
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,7 +180,7 @@ const Home: React.FC = () => {
               <p className="text-xl mb-8">{slide.description}</p>
               <Link
                 to={slide.link}
-                className="inline-flex items-center bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center bg-pink-600 text-white px-8 py-3 rounded-lg hover:bg-pink-700 transition-colors"
               >
                 Shop Now
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -168,7 +208,7 @@ const Home: React.FC = () => {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full ${index === currentSlide ? "bg-blue-600" : "bg-gray-400"} transition`}
+            className={`w-3 h-3 rounded-full ${index === currentSlide ? "bg-pink-600" : "bg-gray-400"} transition`}
           ></button>
         ))}
       </div>
@@ -178,17 +218,17 @@ const Home: React.FC = () => {
       <section className="max-w-7xl mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
-            <ShoppingBag className="mx-auto h-12 w-12 text-blue-600" />
+            <ShoppingBag className="mx-auto h-12 w-12 text-pink-600" />
             <h3 className="mt-4 text-xl font-semibold">Premium Selection</h3>
             <p className="mt-2 text-gray-600">Curated products from top brands</p>
           </div>
           <div className="text-center">
-            <Truck className="mx-auto h-12 w-12 text-blue-600" />
+            <Truck className="mx-auto h-12 w-12 text-pink-600" />
             <h3 className="mt-4 text-xl font-semibold">Fast Delivery</h3>
-            <p className="mt-2 text-gray-600">Free shipping on orders over $50</p>
+            <p className="mt-2 text-gray-600">Free shipping on orders</p>
           </div>
           <div className="text-center">
-            <Shield className="mx-auto h-12 w-12 text-blue-600" />
+            <Shield className="mx-auto h-12 w-12 text-pink-600" />
             <h3 className="mt-4 text-xl font-semibold">Secure Shopping</h3>
             <p className="mt-2 text-gray-600">100% secure payment</p>
           </div>
@@ -196,63 +236,199 @@ const Home: React.FC = () => {
       </section>
 
       {/* Categories Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900">Shop by Category</h2>
-          <p className="mt-4 text-gray-600">Explore our wide range of premium products</p>
+      <section id="categories" className="max-w-7xl mx-auto px-6 py-16">
+  <div className="text-center mb-14">
+    <h2 className="text-4xl font-extrabold text-gray-900 mb-5">
+      Shop By Category
+    </h2>
+    <p className="text-lg text-gray-500">
+      Discover premium products tailored to your needs
+    </p>
+  </div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {CATEGORIES.map((category) => (
+      <Link key={category.id} to={`/products?category=${category.id}`}>
+      <div className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        <img
+          src={category.image}
+          alt={category.name}
+          className="w-full h-52 object-cover transform group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-75 group-hover:opacity-90 transition-opacity duration-300"></div>
+        <div className="absolute bottom-4 left-4 text-white">
+          <h4 className="text-lg font-semibold">{category.name}</h4>
+          <p className="text-sm mt-1">{category.description}</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {CATEGORIES.map((category) => (
-            <Link key={category.id} to={`/category/${category.id}`}>
-              <div className="relative group">
-                <img
-                  src={category.image}
-                  alt={category.name}
-                  className="w-full h-48 object-cover rounded-lg shadow-lg"
-                />
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 group-hover:bg-opacity-70 transition-all duration-300 ease-in-out">
-                  <div className="text-center text-white">
-                    <h4 className="text-lg font-semibold">{category.name}</h4>
-                    <p className="mt-2 text-sm">{category.description}</p>
-                  </div>
+      </div>
+    </Link>
+
+    ))}
+  </div>
+</section>
+
+       {/* Deals Section */}
+      <section id="deals" className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Today's Best Product Deals
+          </h2>
+          <p className="text-lg text-gray-600">
+            Unbeatable prices on top-rated products
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {deals.map((deal) => (
+            <div
+              key={deal.id}
+              className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105"
+            >
+              <div className="relative">
+                <div className="aspect-w-1 aspect-h-1">
+                  <div className="w-full h-48 bg-gray-200"></div>
+                </div>
+                <div className="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-md">
+                  -{deal.discount}%
                 </div>
               </div>
-            </Link>
+
+              <div className="p-6">
+                <p className="text-sm text-gray-500 mb-2">{deal.category}</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {deal.title}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-lg font-bold text-gray-900">
+                      ${deal.price}
+                    </span>
+                    <span className="text-sm text-gray-500 line-through ml-2">
+                      ${deal.originalPrice}
+                    </span>
+                  </div>
+                  <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md transition-colors duration-200">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
-      </section>
 
-      {/* Customer Reviews Section */}
-      <section className="bg-gray-100 py-16">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Customer Reviews</h2>
-          <div className="mt-8 space-y-8">
-            {reviews.map((review) => (
-              <div
-                key={review.id}
-                className="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-              >
-                <p className="text-lg font-semibold">{review.username}</p>
-                <div className="flex justify-center mt-2">
-                  {[...Array(5)].map((_, index) => (
-                    <svg
-                      key={index}
-                      xmlns="http://www.w3.org/2000/svg"
-                      className={`h-5 w-5 ${index < review.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      stroke="currentColor"
-                    >
-                      <path d="M10 15l-3.09 1.628a1 1 0 01-1.453-1.054l.588-3.45-2.55-2.28a1 1 0 01.553-1.709l3.479-.515 1.554-3.15a1 1 0 012.14 0l1.554 3.15 3.479.515a1 1 0 01.553 1.709l-2.55 2.28.588 3.45a1 1 0 01-1.453 1.054L10 15z" />
-                    </svg>
-                  ))}
-                </div>
-                <p className="mt-2 text-gray-600">{review.comment}</p>
+        <div className="text-center mt-12">
+          <button onClick={() => navigate('/products')}
+      className="bg-pink-900 hover:bg-pink-800 text-white px-8 py-3 rounded-md transition-colors duration-200 inline-flex items-center">
+      View All Products<svg className="w-5 h-5 ml-2"fill="none"stroke="currentColor"viewBox="0 0 24 24"xmlns="http://www.w3.org/2000/svg">
+        <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2}d="M9 5l7 7-7 7"/></svg>
+    </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="delivery" className="bg-gray-50 py-16">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <p className="mt-4 text-lg text-gray-600">
+            We ensure your orders are delivered quickly and securely across the
+            country, with your privacy and satisfaction guaranteed.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="space-y-6">
+            <div className="flex items-start space-x-4">
+              <div className="bg-pink-100 text-pink-600 p-3 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 1.343-3 3 0 1.034.527 1.945 1.32 2.473a2.996 2.996 0 00-1.32 2.527c0 1.657 1.343 3 3 3s3-1.343 3-3c0-1.034-.527-1.945-1.32-2.473a2.996 2.996 0 001.32-2.527c0-1.657-1.343-3-3-3z"
+                  />
+                </svg>
               </div>
-            ))}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Nationwide Delivery
+                </h3>
+                <p className="text-gray-600">
+                  We deliver to your doorstep anywhere in the country. Our
+                  reliable team ensures your order arrives in perfect condition.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-4">
+              <div className="bg-pink-100 text-pink-600 p-3 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16v-2a4 4 0 014-4h0a4 4 0 014 4v2m-6 4h8a2 2 0 002-2v-1H5v1a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Guaranteed Privacy
+                </h3>
+                <p className="text-gray-600">
+                  Your orders are shipped with discreet packaging, ensuring
+                  confidentiality with no branding or labels.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-4">
+              <div className="bg-pink-100 text-pink-600 p-3 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h8m-8 6h16"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Flexible Hours
+                </h3>
+                <p className="text-gray-600">
+                  Open Monday to Saturday, from 8:30 AM to 7:30 PM. Order
+                  anytime, and we’ll process your request promptly.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="relative">
+            <img
+              src="https://media.istockphoto.com/id/689544510/photo/delivery-of-a-floral-workshop.webp?a=1&b=1&s=612x612&w=0&k=20&c=UehgX9uwcWfFJmgcTM3FRzXHsQucJG5HnLpSu3Hn8Bw="
+              alt="Delivery Illustration"
+              className="rounded-lg shadow-lg"
+            />
+            <div className="absolute inset-0 bg-pink-600 bg-opacity-10 rounded-lg"></div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* Contact Form Section */}
       <section className="max-w-7xl mx-auto px-4 py-16">
@@ -299,7 +475,7 @@ const Home: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-colors"
+            className="mt-6 bg-pink-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-pink-700 transition-colors"
             disabled={formSubmitted}
           >
             {formSubmitted ? 'Thank You!' : 'Submit'}
@@ -316,13 +492,13 @@ const Home: React.FC = () => {
               <h3 className="text-lg font-semibold mb-4">About ShopHub</h3>
               <p className="text-gray-400">Your premier destination for premium electronics, audio equipment, and cutting-edge technology.</p>
               <div className="flex space-x-4 mt-4">
-                <a href="#" className="hover:text-blue-400 transition-colors">
+                <a href="#" className="hover:text-pink-400 transition-colors">
                   <Facebook className="h-5 w-5" />
                 </a>
-                <a href="#" className="hover:text-blue-400 transition-colors">
+                <a href="#" className="hover:text-pink-400 transition-colors">
                   <Twitter className="h-5 w-5" />
                 </a>
-                <a href="#" className="hover:text-blue-400 transition-colors">
+                <a href="#" className="hover:text-pink-400 transition-colors">
                   <Instagram className="h-5 w-5" />
                 </a>
               </div>
@@ -368,9 +544,9 @@ const Home: React.FC = () => {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="bg-gray-800 text-white px-4 py-2 rounded-l-lg flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-gray-800 text-white px-4 py-2 rounded-l-lg flex-1 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 />
-                <button className="bg-blue-600 px-4 py-2 rounded-r-lg hover:bg-blue-700 transition-colors">
+                <button className="bg-pink-600 px-4 py-2 rounded-r-lg hover:bg-pink-700 transition-colors">
                   <Mail className="h-5 w-5" />
                 </button>
               </div>

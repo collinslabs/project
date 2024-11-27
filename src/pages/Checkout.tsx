@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { useCartStore } from '../lib/store';
 import { CreditCard } from 'lucide-react';
+import { db } from '../lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -10,62 +13,78 @@ interface ShippingDetails {
   firstName: string;
   lastName: string;
   email: string;
-  address: string;
+  phonenumber: string;
+  buildingname: string;
+  streetname: string;
   city: string;
-  state: string;
-  zipCode: string;
-  country: string;
+  town: string;
+  postalCode: string;
 }
-
-const countries = [
-  { code: 'US', name: 'United States' },
-  { code: 'CA', name: 'Canada' },
-  { code: 'GB', name: 'United Kingdom' },
-  { code: 'AU', name: 'Australia' },
-];
 
 export function Checkout() {
   const navigate = useNavigate();
   const { items, total, clearCart } = useCartStore();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [shippingDetails, setShippingDetails] = useState<ShippingDetails>({
     firstName: '',
     lastName: '',
     email: '',
-    address: '',
+    phonenumber: '',
+    buildingname: '',
+    streetname: '',
     city: '',
-    state: '',
-    zipCode: '',
-    country: 'US',
+    town: '',
+    postalCode: '',
   });
+
+  useEffect(() => {
+    const fetchAccountData = async () => {
+      setLoading(true);
+      try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (user) {
+          const userDocRef = doc(db, 'users', user.uid);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setShippingDetails({
+              firstName: data.firstName || '',
+              lastName: data.lastName || '',
+              email: data.email || '',
+              phonenumber: data.phonenumber || '',
+              buildingname: data.buildingname || '',
+              streetname: data.streetname || '',
+              city: data.city || '',
+              town: data.town || '',
+              postalCode: data.postalCode || '',
+            });
+          } else {
+            setError('No user data found.');
+          }
+        } else {
+          setError('You must be signed in to proceed.');
+          navigate('/signin');
+        }
+      } catch (err) {
+        console.error('Error fetching account data:', err);
+        setError('Failed to load account data. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAccountData();
+  }, [navigate]);
 
   if (items.length === 0) {
     alert('Your cart is empty. Redirecting to cart page...');
     navigate('/cart');
     return null;
   }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const stripe = await stripePromise;
-      if (!stripe) throw new Error('Stripe failed to load');
-
-      // Placeholder for backend interaction (e.g., payment intent creation)
-      // Simulate successful payment processing for demo purposes
-      setTimeout(() => {
-        clearCart();
-        navigate('/order-success');
-      }, 2000);
-    } catch (error) {
-      console.error('Payment failed:', error);
-      alert('Something went wrong with the payment. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -75,71 +94,128 @@ export function Checkout() {
     }));
   };
 
+  const validateForm = () => {
+    for (const [key, value] of Object.entries(shippingDetails)) {
+      if (!value.trim()) return `${key} is required`;
+    }
+    return null;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error('Stripe failed to load.');
+
+      // Placeholder for backend integration
+      setTimeout(() => {
+        clearCart();
+        navigate('/order-success');
+      }, 2000);
+    } catch (error) {
+      console.error('Payment failed:', error);
+      setError('Payment processing failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-24">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Shipping Form */}
         <div>
           <h2 className="text-2xl font-bold mb-8">Shipping Information</h2>
+          {error && (
+            <div className="p-4 mb-4 text-red-700 bg-red-100 rounded-lg">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                 <input
                   type="text"
                   name="firstName"
-                  required
                   value={shippingDetails.firstName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                 <input
                   type="text"
                   name="lastName"
-                  required
                   value={shippingDetails.lastName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
                 />
               </div>
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input
                 type="email"
                 name="email"
-                required
                 value={shippingDetails.email}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                required
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Address
+                PhoneNumber
+              </label>
+              <input
+                type="tel"
+                name="phonenumber"
+                required
+                value={shippingDetails.phonenumber}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
+               <div className="grid grid-cols-2 gap-4">
+                 <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+               Building Name/Number
               </label>
               <input
                 type="text"
-                name="address"
+                name="buildingname"
                 required
-                value={shippingDetails.address}
+                value={shippingDetails.buildingname}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
               />
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+               Street Name/Area
+              </label>
+              <input
+                type="text"
+                name="streetname"
+                required
+                value={shippingDetails.streetname}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   City
@@ -150,69 +226,45 @@ export function Checkout() {
                   required
                   value={shippingDetails.city}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  State
+                  Town
                 </label>
                 <input
                   type="text"
-                  name="state"
+                  name="town"
                   required
-                  value={shippingDetails.state}
+                  value={shippingDetails.town}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
                 />
               </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  ZIP Code
+                  Postal Code
                 </label>
                 <input
                   type="text"
-                  name="zipCode"
+                  name="postalCode"
                   required
-                  value={shippingDetails.zipCode}
+                  value={shippingDetails.postalCode}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Country
-                </label>
-                <select
-                  name="country"
-                  value={shippingDetails.country}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  {countries.map(({ code, name }) => (
-                    <option key={code} value={code}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </div>
             </div>
-
             <div className="pt-4">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400 flex items-center justify-center"
+                className="w-full bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors disabled:bg-pink-400 flex items-center justify-center"
               >
                 {loading ? (
                   <div className="flex items-center justify-center space-x-2">
-                    <svg
-                      className="animate-spin h-5 w-5 text-white"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
                       <circle
                         className="opacity-25"
                         cx="12"
@@ -221,6 +273,7 @@ export function Checkout() {
                         stroke="currentColor"
                         strokeWidth="4"
                       ></circle>
+
                       <path
                         className="opacity-75"
                         fill="currentColor"
@@ -232,12 +285,14 @@ export function Checkout() {
                 ) : (
                   <>
                     <CreditCard className="h-5 w-5 mr-2" />
-                    Pay ${(total > 50 ? total : total + 4.99).toFixed(2)}
+                    Pay KES {(total > 50 ? total : total + 4.99).toFixed(2)}
                   </>
                 )}
               </button>
             </div>
+  
           </form>
+          
         </div>
 
         {/* Order Summary */}
@@ -245,10 +300,7 @@ export function Checkout() {
           <h2 className="text-2xl font-bold mb-8">Order Summary</h2>
           <div className="bg-gray-50 rounded-lg p-6">
             {items.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center space-x-4 border-b py-4 last:border-0"
-              >
+              <div key={item.id} className="flex items-center space-x-4 border-b py-4 last:border-0">
                 <img
                   src={item.image}
                   alt={item.name}
@@ -257,27 +309,25 @@ export function Checkout() {
                 <div className="flex-1">
                   <h3 className="font-semibold">{item.name}</h3>
                   <p className="text-gray-600">
-                    ${item.price} × {item.quantity}
+                    KES {item.price} × {item.quantity}
                   </p>
                 </div>
-                <p className="font-semibold">
-                  ${(item.price * item.quantity).toFixed(2)}
-                </p>
+                <p className="font-semibold">KES {(item.price * item.quantity).toFixed(2)}</p>
               </div>
             ))}
 
             <div className="mt-6 space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>${total.toFixed(2)}</span>
+                <span>KES {total.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span>{total > 50 ? 'Free' : '$4.99'}</span>
+                <span>{total > 50 ? 'Free' : 'KES 4.99'}</span>
               </div>
               <div className="flex justify-between font-bold text-lg">
                 <span>Total</span>
-                <span>${(total > 50 ? total : total + 4.99).toFixed(2)}</span>
+                <span>KES {(total > 50 ? total : total + 4.99).toFixed(2)}</span>
               </div>
             </div>
           </div>

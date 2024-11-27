@@ -6,87 +6,166 @@ import { useState } from 'react';
 export function Navbar() {
   const cartItems = useCartStore((state) => state.items);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for the dropdown
+  const [isFadingOut, setIsFadingOut] = useState(false); // State for fade-out animation
+
+  const handleLinkClick = () => {
+    setIsFadingOut(true);
+    setTimeout(() => {
+      setIsMenuOpen(false);
+      setIsFadingOut(false);
+    }, 300); // Matches transition duration
+  };
 
   return (
-    <nav className="bg-rose-600 shadow-lg fixed w-full z-50">
+    <nav className="bg-white shadow-sm fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center text-white">
-              <h1 className="text-2xl font-bold tracking-wide">ShopHub</h1>
+            <Link to="/" className="flex-shrink-0 flex items-center text-pink-600">
+              <div className="flex items-center">
+                <ShoppingCart className="h-6 w-6 mr-1" />
+                <h1 className="text-xl font-semibold">Shopcart</h1>
+              </div>
             </Link>
             <div className="hidden md:flex md:ml-6 md:space-x-8">
-              <Link
-                to="/"
-                className="text-pink-100 hover:text-white transition duration-200 ease-in-out"
-              >
-                Home
-              </Link>
-              <Link
-                to="/products"
-                className="text-pink-100 hover:text-white transition duration-200 ease-in-out"
-              >
-                Products
-              </Link>
+              <a href="#categories" className="text-gray-700 hover:text-pink-600 transition">
+                Categories
+              </a>
+              <a href="#deals" className="text-gray-700 hover:text-pink-600 transition">
+                Deals
+              </a>
+              <a href="#whats-new" className="text-gray-700 hover:text-pink-600 transition">
+                What's New
+              </a>
+              <a href="#delivery" className="text-gray-700 hover:text-pink-600 transition">
+                Delivery
+              </a>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <Link
-              to="/cart"
-              className="relative p-2 rounded-full hover:bg-rose-700 transition duration-200 ease-in-out"
-            >
-              <ShoppingCart className="h-6 w-6 text-white" />
-              {cartItems.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-pink-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                  {cartItems.length}
-                </span>
+          <div className="flex items-center space-x-6">
+            <div className="hidden md:block">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search Product"
+                  className="w-64 px-4 py-2 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                />
+              </div>
+            </div>
+
+            {/* Account Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="text-gray-700 hover:text-pink-600 transition flex items-center"
+              >
+                <User className="h-5 w-5 mr-1" />
+                <span>Account</span>
+              </button>
+
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-200">
+                  <ul>
+                    <li>
+                      <Link
+                        to="/signin"
+                        className="block px-4 py-2 text-gray-700 hover:bg-pink-600 hover:text-white transition"
+                      >
+                        Login
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/signup"
+                        className="block px-4 py-2 text-gray-700 hover:bg-pink-600 hover:text-white transition"
+                      >
+                        Register
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/account/settings"
+                        className="block px-4 py-2 text-gray-700 hover:bg-pink-600 hover:text-white transition"
+                      >
+                        Account Settings
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
               )}
+            </div>
+
+            <Link to="/cart" className="text-gray-700 hover:text-pink-600 transition flex items-center">
+              <div className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItems.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-pink-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                    {cartItems.length}
+                  </span>
+                )}
+              </div>
+              <span className="ml-1">Cart</span>
             </Link>
-            <Link
-              to="/account"
-              className="p-2 rounded-full hover:bg-rose-700 transition duration-200 ease-in-out"
-            >
-              <User className="h-6 w-6 text-white" />
-            </Link>
-            <Link
-              to="/signin"
-              className="bg-pink-500 text-white hover:bg-pink-600 transition duration-200 ease-in-out px-4 py-2 rounded-md"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/signup"
-              className="bg-pink-700 text-white hover:bg-pink-800 transition duration-200 ease-in-out px-4 py-2 rounded-md"
-            >
-              Get Started
-            </Link>
+
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 rounded-md text-white hover:bg-rose-700 transition"
+                className="p-2 rounded-md text-gray-700 hover:text-pink-600 transition"
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
             </div>
           </div>
         </div>
+
         {isMenuOpen && (
-          <div className="md:hidden bg-rose-500 text-pink-100 rounded-lg shadow-md p-4 space-y-4">
-            <Link to="/" className="block hover:text-white transition">
-              Home
-            </Link>
-            <Link to="/products" className="block hover:text-white transition">
-              Products
-            </Link>
-            <Link to="/signin" className="block hover:text-white transition">
-              Sign In
-            </Link>
-            <Link to="/signup" className="block hover:text-white transition">
-              Get Started
-            </Link>
+          <div
+            className={`md:hidden bg-white border-t py-4 space-y-4 px-4 transition-opacity duration-300 ${
+              isFadingOut ? 'opacity-0' : 'opacity-100'
+            }`}
+          >
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Search Product"
+                className="w-full px-4 py-2 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
+            <a
+  href="#categories"
+  className="block text-gray-700 hover:text-pink-600 transition"
+  onClick={handleLinkClick}
+>
+  Categories
+</a>
+<a
+  href="#deals"
+  className="block text-gray-700 hover:text-pink-600 transition"
+  onClick={handleLinkClick}
+>
+  Deals
+</a>
+<a
+  href="#whats-new"
+  className="block text-gray-700 hover:text-pink-600 transition"
+  onClick={handleLinkClick}
+>
+  What's New
+</a>
+<a
+  href="#delivery"
+  className="block text-gray-700 hover:text-pink-600 transition"
+  onClick={handleLinkClick}
+>
+  Delivery
+</a>
+
           </div>
         )}
       </div>
     </nav>
   );
 }
+
+export default Navbar;

@@ -12,7 +12,7 @@ export function OrderSuccess() {
         </p>
         <Link
           to="/products"
-          className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          className="inline-block bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors"
         >
           Continue Shopping
         </Link>
