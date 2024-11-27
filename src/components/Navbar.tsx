@@ -13,6 +13,7 @@ export function Navbar() {
     setIsFadingOut(true);
     setTimeout(() => {
       setIsMenuOpen(false);
+      setIsDropdownOpen(false); // Close the dropdown
       setIsFadingOut(false);
     }, 300); // Matches transition duration
   };
@@ -72,7 +73,7 @@ export function Navbar() {
                   style={{ transitionDuration: '300ms' }}
                 >
                   <ul>
-                    <li className="transition-transform duration-300 transform hover:translate-y-1">
+                    <li>
                       <Link
                         to="/signin"
                         className="block px-4 py-2 text-gray-700 hover:bg-pink-600 hover:text-white transition"
@@ -81,7 +82,7 @@ export function Navbar() {
                         Login
                       </Link>
                     </li>
-                    <li className="transition-transform duration-300 transform hover:translate-y-1">
+                    <li>
                       <Link
                         to="/signup"
                         className="block px-4 py-2 text-gray-700 hover:bg-pink-600 hover:text-white transition"
@@ -90,7 +91,7 @@ export function Navbar() {
                         Register
                       </Link>
                     </li>
-                    <li className="transition-transform duration-300 transform hover:translate-y-1">
+                    <li>
                       <Link
                         to="/account/settings"
                         className="block px-4 py-2 text-gray-700 hover:bg-pink-600 hover:text-white transition"
