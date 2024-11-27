@@ -93,7 +93,7 @@ export function Navbar() {
                     </li>
                     <li>
                       <Link
-                        to="/account/settings"
+                        to="/account-settings"
                         className="block px-4 py-2 text-gray-700 hover:bg-pink-600 hover:text-white transition"
                         onClick={handleLinkClick}
                       >
