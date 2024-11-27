@@ -15,7 +15,7 @@ export function Navbar() {
       setIsMenuOpen(false);
       setIsDropdownOpen(false); // Close the dropdown
       setIsFadingOut(false);
-    }, 300); // Matches transition duration
+    }, 200); // Matches transition duration
   };
 
   return (
