@@ -65,28 +65,36 @@ export function Navbar() {
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-200">
+                <div
+                  className={`absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-200 transition-all transform ${
+                    isDropdownOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                  }`}
+                  style={{ transitionDuration: '300ms' }}
+                >
                   <ul>
-                    <li>
+                    <li className="transition-transform duration-300 transform hover:translate-y-1">
                       <Link
                         to="/signin"
                         className="block px-4 py-2 text-gray-700 hover:bg-pink-600 hover:text-white transition"
+                        onClick={handleLinkClick}
                       >
                         Login
                       </Link>
                     </li>
-                    <li>
+                    <li className="transition-transform duration-300 transform hover:translate-y-1">
                       <Link
                         to="/signup"
                         className="block px-4 py-2 text-gray-700 hover:bg-pink-600 hover:text-white transition"
+                        onClick={handleLinkClick}
                       >
                         Register
                       </Link>
                     </li>
-                    <li>
+                    <li className="transition-transform duration-300 transform hover:translate-y-1">
                       <Link
                         to="/account/settings"
                         className="block px-4 py-2 text-gray-700 hover:bg-pink-600 hover:text-white transition"
+                        onClick={handleLinkClick}
                       >
                         Account Settings
                       </Link>
@@ -121,9 +129,7 @@ export function Navbar() {
 
         {isMenuOpen && (
           <div
-            className={`md:hidden bg-white border-t py-4 space-y-4 px-4 transition-opacity duration-300 ${
-              isFadingOut ? 'opacity-0' : 'opacity-100'
-            }`}
+            className={`md:hidden bg-white border-t py-4 space-y-4 px-4 transition-opacity duration-300 ${isFadingOut ? 'opacity-0' : 'opacity-100'}`}
           >
             <div className="mb-4">
               <input
@@ -133,34 +139,33 @@ export function Navbar() {
               />
             </div>
             <a
-  href="#categories"
-  className="block text-gray-700 hover:text-pink-600 transition"
-  onClick={handleLinkClick}
->
-  Categories
-</a>
-<a
-  href="#deals"
-  className="block text-gray-700 hover:text-pink-600 transition"
-  onClick={handleLinkClick}
->
-  Deals
-</a>
-<a
-  href="#whats-new"
-  className="block text-gray-700 hover:text-pink-600 transition"
-  onClick={handleLinkClick}
->
-  What's New
-</a>
-<a
-  href="#delivery"
-  className="block text-gray-700 hover:text-pink-600 transition"
-  onClick={handleLinkClick}
->
-  Delivery
-</a>
-
+              href="#categories"
+              className="block text-gray-700 hover:text-pink-600 transition"
+              onClick={handleLinkClick}
+            >
+              Categories
+            </a>
+            <a
+              href="#deals"
+              className="block text-gray-700 hover:text-pink-600 transition"
+              onClick={handleLinkClick}
+            >
+              Deals
+            </a>
+            <a
+              href="#whats-new"
+              className="block text-gray-700 hover:text-pink-600 transition"
+              onClick={handleLinkClick}
+            >
+              What's New
+            </a>
+            <a
+              href="#delivery"
+              className="block text-gray-700 hover:text-pink-600 transition"
+              onClick={handleLinkClick}
+            >
+              Delivery
+            </a>
           </div>
         )}
       </div>
