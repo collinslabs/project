@@ -40,7 +40,8 @@ export function SignIn() {
         setError('');
 
         setTimeout(() => {
-          navigate('/dashboard');
+          // Navigate to the home page after a successful login
+          navigate('/products');
         }, 2000);
       } else {
         throw new Error("User data not found in Firestore");
