@@ -1,16 +1,17 @@
-import { useState } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { collection, addDoc, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface Product {
+  id?: string;
   name: string;
   price: number;
   image: string;
   description: string;
   category: string;
-  addedBy: string; 
+  addedBy: string;
 }
 
 export function Admin() {
@@ -20,12 +21,35 @@ export function Admin() {
     image: '',
     description: '',
     category: 'electronics',
-    addedBy: '',
+    addedBy: 'collinsyegon816@gmail.com',
   });
+  const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingProducts, setLoadingProducts] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoadingProducts(true);
+      try {
+        const querySnapshot = await getDocs(collection(db, 'products'));
+        const fetchedProducts: Product[] = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Product[];
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setError('Failed to fetch products.');
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -34,7 +58,6 @@ export function Admin() {
     setSuccessMessage('');
 
     try {
-      // Validate input
       if (!formData.name || !formData.price || !formData.image || !formData.description) {
         throw new Error('All fields are required.');
       }
@@ -45,13 +68,12 @@ export function Admin() {
 
       const productData = {
         ...formData,
-        price: parseFloat(formData.price.toString()), // Ensure price is parsed correctly
-        addedBy: 'collinsyegon816@gmail.com', // Make sure this is set
+        price: parseFloat(formData.price.toString()),
       };
 
-      // Add product to Firestore
       await addDoc(collection(db, 'products'), productData);
 
+      setProducts((prev) => [...prev, { ...productData }]);
       setFormData({
         name: '',
         price: 0,
@@ -62,9 +84,11 @@ export function Admin() {
       });
 
       setSuccessMessage('Product added successfully!');
+
+      // Redirect to /products with a timeout after successful product addition
       setTimeout(() => {
         navigate('/products');
-      }, 2000);
+      }, 2000); // Timeout of 2 seconds before redirecting
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error('Error adding product:', error);
@@ -75,6 +99,17 @@ export function Admin() {
       }
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleDelete(productId: string) {
+    try {
+      await deleteDoc(doc(db, 'products', productId));
+      setProducts((prev) => prev.filter((product) => product.id !== productId));
+      setSuccessMessage('Product deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      setError('Failed to delete product.');
     }
   }
 
@@ -164,6 +199,36 @@ export function Admin() {
             )}
           </button>
         </form>
+      </div>
+
+      {/* Product List */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-semibold mb-4">Product List</h2>
+        {loadingProducts ? (
+          <p>Loading products...</p>
+        ) : (
+          <ul className="space-y-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <li key={product.id} className="flex items-center justify-between border p-4 rounded-lg">
+                <div className="flex items-center space-x-4">
+                  <img src={product.image} alt={product.name} className="h-16 w-16 object-cover rounded" />
+                  <div>
+                    <h3 className="text-lg font-bold">{product.name}</h3>
+                    <p>{product.description}</p>
+                    <p className="text-sm text-gray-500">Category: {product.category}</p>
+                    <p className="text-sm text-gray-500">Price: KES {product.price.toFixed(2)}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleDelete(product.id!)}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

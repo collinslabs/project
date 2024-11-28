@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loadStripe } from '@stripe/stripe-js';
 import { useCartStore } from '../lib/store';
 import { CreditCard } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import axios from 'axios';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 interface ShippingDetails {
   firstName: string;
@@ -81,11 +80,10 @@ export function Checkout() {
   }, [navigate]);
 
   if (items.length === 0) {
-    alert('Your cart is empty. Redirecting to cart page...');
-    navigate('/cart');
+    navigate('/payment-confirmation');
     return null;
   }
-
+   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setShippingDetails((prev) => ({
@@ -108,17 +106,19 @@ export function Checkout() {
       setError(validationError);
       return;
     }
-
+  
     setLoading(true);
+    setError(null);
+  
     try {
-      const stripe = await stripePromise;
-      if (!stripe) throw new Error('Stripe failed to load.');
-
-      // Placeholder for backend integration
-      setTimeout(() => {
-        clearCart();
-        navigate('/order-success');
-      }, 2000);
+      const phone = shippingDetails.phonenumber.substring(1);
+      const amount = parseFloat((total > 50 ? total : total + 4.99).toFixed(2));
+  
+      // Payment API call
+      await axios.post("https://ndstk.onrender.com/stk", { phone, amount });
+  
+      clearCart();
+      navigate('/payment-confirmation');
     } catch (error) {
       console.error('Payment failed:', error);
       setError('Payment processing failed. Please try again.');
@@ -126,6 +126,7 @@ export function Checkout() {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-24">

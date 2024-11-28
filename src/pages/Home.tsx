@@ -2,6 +2,9 @@ import { ArrowRight, ShoppingBag, Truck, Shield, Mail, Facebook, Twitter, Instag
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { collection, getDocs  } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { useCartStore } from '../lib/store';
 
 
 interface FormData {
@@ -9,54 +12,17 @@ interface FormData {
   email: string;
   message: string;
 }
-interface Deal {
-  id: number;
-  title: string;
+interface Product {
+  id: string;
+  name: string;
   price: number;
-  originalPrice: number;
-  discount: number;
   image: string;
+  description: string;
   category: string;
+  addedBy: string;
 }
 
-const deals: Deal[] = [
-  {
-    id: 1,
-    title: "Wireless Noise-Canceling Headphones",
-    price: 199.99,
-    originalPrice: 349.99,
-    discount: 43,
-    image: "/headphones.jpg",
-    category: "Electronics"
-  },
-  {
-    id: 2,
-    title: "Smart Fitness Watch",
-    price: 149.99,
-    originalPrice: 249.99,
-    discount: 40,
-    image: "/watch.jpg",
-    category: "Wearables"
-  },
-  {
-    id: 3,
-    title: "4K Ultra HD Smart TV - 55\"",
-    price: 499.99,
-    originalPrice: 799.99,
-    discount: 38,
-    image: "/tv.jpg",
-    category: "Electronics"
-  },
-  {
-    id: 4,
-    title: "Robot Vacuum Cleaner",
-    price: 299.99,
-    originalPrice: 499.99,
-    discount: 40,
-    image: "/vacuum.jpg",
-    category: "Home"
-  }
-];
+
 
 const CATEGORIES = [
   {
@@ -115,6 +81,41 @@ const Home: React.FC = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formErrors, setFormErrors] = useState({ email: '' });
 
+  const [products, setProducts] = useState<Product[]>([]);
+  const addItem = useCartStore((state) => state.addItem);
+
+  useEffect(() => {
+    // Fetch products from Firestore
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "products")); // 'products' is your Firestore collection name
+        const productList: Product[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          productList.push({
+            id: doc.id,
+            name: data.name,
+            price: data.price,
+            image: data.image,
+            description: data.description,
+            category: data.category,
+            addedBy: data.addedBy,
+          });
+        });
+        setProducts(productList); // Set the products data into the state
+      } catch (error) {
+        console.error("Error fetching products from Firebase:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleAddToCart = (product: Product) => {
+    // Add the item to the cart with a default quantity of 1
+    addItem({ id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1 });
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -158,6 +159,8 @@ const Home: React.FC = () => {
     // Clear the interval when the component unmounts
     return () => clearInterval(slideInterval);
   }, []);
+
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-rose-50 to-purple-50 shadow-lg">
@@ -267,7 +270,7 @@ const Home: React.FC = () => {
 </section>
 
        {/* Deals Section */}
-      <section id="deals" className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+       <section id="products" className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -279,35 +282,33 @@ const Home: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {deals.map((deal) => (
+          {/* Directly slicing the products array in the map */}
+          {products.slice(0, 4).map((product) => (
             <div
-              key={deal.id}
+              key={product.id}
               className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105"
             >
               <div className="relative">
                 <div className="aspect-w-1 aspect-h-1">
-                  <div className="w-full h-48 bg-gray-200"></div>
-                </div>
-                <div className="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-md">
-                  -{deal.discount}%
+                  <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
                 </div>
               </div>
 
               <div className="p-6">
-                <p className="text-sm text-gray-500 mb-2">{deal.category}</p>
+                <p className="text-sm text-gray-500 mb-2">{product.category}</p>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {deal.title}
+                  {product.name}
                 </h3>
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-lg font-bold text-gray-900">
-                      ${deal.price}
-                    </span>
-                    <span className="text-sm text-gray-500 line-through ml-2">
-                      ${deal.originalPrice}
+                      KES {product.price}
                     </span>
                   </div>
-                  <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md transition-colors duration-200">
+                  <button
+                    onClick={() => handleAddToCart(product)} // Call handleAddToCart with the current product
+                    className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md transition-colors duration-200"
+                  >
                     Add to Cart
                   </button>
                 </div>
@@ -317,11 +318,26 @@ const Home: React.FC = () => {
         </div>
 
         <div className="text-center mt-12">
-          <button onClick={() => navigate('/products')}
-      className="bg-pink-900 hover:bg-pink-800 text-white px-8 py-3 rounded-md transition-colors duration-200 inline-flex items-center">
-      View All Products<svg className="w-5 h-5 ml-2"fill="none"stroke="currentColor"viewBox="0 0 24 24"xmlns="http://www.w3.org/2000/svg">
-        <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2}d="M9 5l7 7-7 7"/></svg>
-    </button>
+          <button
+            onClick={() => navigate("/products")}
+            className="bg-pink-900 hover:bg-pink-800 text-white px-8 py-3 rounded-md transition-colors duration-200 inline-flex items-center"
+          >
+            View All Products
+            <svg
+              className="w-5 h-5 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </section>

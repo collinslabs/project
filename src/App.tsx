@@ -11,6 +11,7 @@ import { SignUp } from './components/SignUp';
 import { SignIn } from './components/SignIn';
 import { ForgotPassword } from './components/FogortPasword';
 import AccountSettings from './pages/AccountSettings';
+import { PaymentConfirmation } from './pages/PaymentConfirmation';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword/>} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/payment-confirmation" element={<PaymentConfirmation/>} />
           <Route path="/order-success" element={<OrderSuccess />} />
         </Routes>
       </div>
