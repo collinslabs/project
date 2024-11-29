@@ -6,20 +6,36 @@ export function PaymentConfirmation() {
   const navigate = useNavigate();
   const { items, clearCart } = useCartStore();
   const [searchParams] = useSearchParams();
-  const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [paymentStatus, setPaymentStatus] = useState<null | 'success' | 'failed'>(null); // Type updated here
 
   useEffect(() => {
-    const paymentStatus = searchParams.get('status');
+    const fetchPaymentStatus = async () => {
+      setLoading(true);
+      const transactionId = searchParams.get('transactionId');
 
-    if (paymentStatus === 'success') {
-      setIsSuccess(true);
-      clearCart();
-    } else {
-      setIsSuccess(false);
-    }
+      if (!transactionId) {
+        setPaymentStatus('failed');
+        setLoading(false);
+        return;
+      }
 
-    setLoading(false);
+      try {
+        const response = await fetch(`/payment-status?transactionId=${transactionId}`);
+        const data = await response.json();
+        setPaymentStatus(data.status as 'success' | 'failed'); // Type assertion
+        if (data.status === 'success') {
+          clearCart();
+        }
+      } catch (error) {
+        console.error("Error fetching payment status:", error);
+        setPaymentStatus('failed');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPaymentStatus();
   }, [searchParams, clearCart]);
 
   if (loading) {
@@ -30,7 +46,7 @@ export function PaymentConfirmation() {
     );
   }
 
-  if (!isSuccess) {
+  if (paymentStatus !== 'success') {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <h2 className="text-2xl font-bold text-red-600">Payment Failed</h2>
@@ -54,7 +70,6 @@ export function PaymentConfirmation() {
         Thank you for your purchase! Your items are being scheduled for packaging and delivery.
         This process will take approximately 3 working days.
       </p>
-
       <div className="mt-8 bg-gray-50 rounded-lg p-6">
         <h3 className="text-xl font-semibold mb-4">Your Order</h3>
         {items.map((item) => (
@@ -76,7 +91,6 @@ export function PaymentConfirmation() {
             <p className="font-semibold">KES {(item.price * item.quantity).toFixed(2)}</p>
           </div>
         ))}
-
         <div className="mt-6 flex justify-end">
           <button
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
