@@ -21,26 +21,29 @@ export function SignIn() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const auth = getAuth();
-
+  
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
-
+  
       const userId = userCredential.user.uid;
-
+  
       const userDocRef = doc(db, "users", userId);
       const userDoc = await getDoc(userDocRef);
-
+  
       if (userDoc.exists()) {
         const userData = userDoc.data();
+        
+        // Store email in localStorage
+        localStorage.setItem("userEmail", formData.email);
+  
         setSuccessMessage(`Welcome back, ${userData.name}!`);
         setError('');
-
+  
         setTimeout(() => {
-          
           navigate('/');
         }, 2000);
       } else {
@@ -51,6 +54,7 @@ export function SignIn() {
       setSuccessMessage('');
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 animate-gradient-background">
