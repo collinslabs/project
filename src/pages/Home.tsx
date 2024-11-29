@@ -570,7 +570,8 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+          <div onClick={() => navigate('/admin')}
+          className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
             <p>&copy; {new Date().getFullYear()} ShopHub. All rights reserved.</p>
           </div>
         </div>
