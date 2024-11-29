@@ -2,7 +2,7 @@
     "version": 2,
     "builds": [
       {
-        "src": "src/app.ts",    
+        "src": "src/App.ts",    
         "use": "@vercel/node",   
         "config": {
           "zeroConfig": true
@@ -12,7 +12,7 @@
     "routes": [
       {
         "src": "/(.*)",          
-        "dest": "src/app.ts"      
+        "dest": "src/App.ts"      
       }
     ]
   }
