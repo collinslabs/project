@@ -134,7 +134,7 @@ export function Products() {
                 />
               </div>
               <select
-                className="px-4 py-2 border rounded-lg bg-white"
+                className="px-4 py-2 w-64 border rounded-lg bg-white"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
               >
