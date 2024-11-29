@@ -11,6 +11,7 @@ interface Product {
   image: string;
   description: string;
   category: string;
+  features: string[];
   addedBy: string;
 }
 
@@ -21,6 +22,7 @@ export function Admin() {
     image: '',
     description: '',
     category: 'electronics',
+    features: [],
     addedBy: 'collinsyegon816@gmail.com',
   });
   const [products, setProducts] = useState<Product[]>([]);
@@ -80,6 +82,7 @@ export function Admin() {
         image: '',
         description: '',
         category: 'electronics',
+        features: [],
         addedBy: 'collinsyegon816@gmail.com',
       });
 
@@ -113,122 +116,160 @@ export function Admin() {
     }
   }
 
+  function handleFeatureChange(e: React.ChangeEvent<HTMLInputElement>, index: number) {
+    const updatedFeatures = [...formData.features];
+    updatedFeatures[index] = e.target.value;
+    setFormData({ ...formData, features: updatedFeatures });
+  }
+
+  function handleAddFeature() {
+    setFormData({ ...formData, features: [...formData.features, ''] });
+  }
+
+  function handleRemoveFeature(index: number) {
+    const updatedFeatures = formData.features.filter((_, i) => i !== index);
+    setFormData({ ...formData, features: updatedFeatures });
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-24">
-      <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+    <div className="max-w-7xl mx-auto px-4 py-12 bg-gray-50">
+      <h1 className="text-2xl font-semibold text-pink-600 mt-5 mb-6">Admin Dashboard</h1>
 
-      {/* Add Product Form */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Form Fields */}
-          {/* Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
-            />
-          </div>
-          {/* Price */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
-            <input
-              type="number"
-              required
-              min="0"
-              step="0.01"
-              value={formData.price}
-              onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
-            />
-          </div>
-          {/* Image URL */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-            <input
-              type="url"
-              required
-              value={formData.image}
-              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
-            />
-          </div>
-          {/* Description */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea
-              required
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
-              rows={3}
-            />
-          </div>
-          {/* Category */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-            <select
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
-            >
-              <option value="electronics">Electronics</option>
-              <option value="audio">Audio</option>
-              <option value="wearables">Wearables</option>
-              <option value="cameras">Cameras</option>
-            </select>
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors disabled:bg-pink-400"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <Loader className="animate-spin h-5 w-5 mr-2" />
-                Adding Product...
-              </span>
-            ) : (
-              'Add Product'
-            )}
-          </button>
-        </form>
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Add Product Form */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Add New Product</h2>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+              <input
+                type="text"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+              <input
+                type="number"
+                required
+                min="0"
+                step="0.01"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+              <input
+                type="url"
+                required
+                value={formData.image}
+                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea
+                required
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500"
+                rows={3}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <select
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500"
+              >
+                <option value="electronics">Electronics</option>
+                <option value="audio">Audio</option>
+                <option value="wearables">Wearables</option>
+                <option value="cameras">Cameras</option>
+              </select>
+            </div>
 
-      {/* Product List */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold mb-4">Product List</h2>
-        {loadingProducts ? (
-          <p>Loading products...</p>
-        ) : (
-          <ul className="space-y-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <li key={product.id} className="flex items-center justify-between border p-4 rounded-lg">
-                <div className="flex items-center space-x-4">
-                  <img src={product.image} alt={product.name} className="h-16 w-16 object-cover rounded" />
-                  <div>
-                    <h3 className="text-lg font-bold">{product.name}</h3>
-                    <p>{product.description}</p>
-                    <p className="text-sm text-gray-500">Category: {product.category}</p>
-                    <p className="text-sm text-gray-500">Price: KES {product.price.toFixed(2)}</p>
-                  </div>
+            {/* Features */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Features</label>
+              {formData.features.map((feature, index) => (
+                <div key={index} className="flex space-x-2 mb-2">
+                  <input
+                    type="text"
+                    value={feature}
+                    onChange={(e) => handleFeatureChange(e, index)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFeature(index)}
+                    className="bg-red-500 text-white px-2 py-1 rounded-lg"
+                  >
+                    Remove
+                  </button>
                 </div>
-                <button
-                  onClick={() => handleDelete(product.id!)}
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
-                >
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+              ))}
+              <button
+                type="button"
+                onClick={handleAddFeature}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg"
+              >
+                Add Feature
+              </button>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors disabled:bg-pink-400"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <Loader className="animate-spin" />
+                </span>
+              ) : (
+                'Add Product'
+              )}
+            </button>
+          </form>
+        </div>
+
+        {/* Products List */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Product List</h2>
+          {loadingProducts ? (
+            <p>Loading products...</p>
+          ) : (
+            <ul>
+              {products.map((product) => (
+                <li key={product.id} className="flex justify-between items-center mb-4">
+                  <div className="flex items-center space-x-4">
+                    <img src={product.image} alt={product.name} className="w-16 h-16 object-cover rounded-lg" />
+                    <div>
+                      <p className="font-semibold">{product.name}</p>
+                      <p className="text-gray-600">{product.category}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleDelete(product.id!)}
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                  >
+                    Delete
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -6,16 +6,24 @@ import { useState } from 'react';
 export function Navbar() {
   const cartItems = useCartStore((state) => state.items);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for the dropdown
-  const [isFadingOut, setIsFadingOut] = useState(false); // State for fade-out animation
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   const handleLinkClick = () => {
     setIsFadingOut(true);
     setTimeout(() => {
       setIsMenuOpen(false);
-      setIsDropdownOpen(false); // Close the dropdown
+      setIsDropdownOpen(false);
       setIsFadingOut(false);
-    }, 200); // Matches transition duration
+    }, 200);
+  };
+
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    const target = document.getElementById(targetId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -26,20 +34,36 @@ export function Navbar() {
             <Link to="/" className="flex-shrink-0 flex items-center text-pink-600">
               <div className="flex items-center">
                 <ShoppingCart className="h-6 w-6 mr-1" />
-                <h1 className="text-xl font-semibold">Shopcart</h1>
+                <h1 className="text-xl font-semibold">Luna Luxe</h1>
               </div>
             </Link>
             <div className="hidden md:flex md:ml-6 md:space-x-8">
-              <a href="#categories" className="text-gray-700 hover:text-pink-600 transition">
+              <a
+                href="#categories"
+                className="text-gray-700 hover:text-pink-600 transition"
+                onClick={(e) => handleSmoothScroll(e, 'categories')}
+              >
                 Categories
               </a>
-              <a href="#deals" className="text-gray-700 hover:text-pink-600 transition">
+              <a
+                href="#deals"
+                className="text-gray-700 hover:text-pink-600 transition"
+                onClick={(e) => handleSmoothScroll(e, 'deals')}
+              >
                 Deals
               </a>
-              <a href="#whats-new" className="text-gray-700 hover:text-pink-600 transition">
+              <a
+                href="#whats-new"
+                className="text-gray-700 hover:text-pink-600 transition"
+                onClick={(e) => handleSmoothScroll(e, 'whats-new')}
+              >
                 What's New
               </a>
-              <a href="#delivery" className="text-gray-700 hover:text-pink-600 transition">
+              <a
+                href="#delivery"
+                className="text-gray-700 hover:text-pink-600 transition"
+                onClick={(e) => handleSmoothScroll(e, 'delivery')}
+              >
                 Delivery
               </a>
             </div>
@@ -142,28 +166,28 @@ export function Navbar() {
             <a
               href="#categories"
               className="block text-gray-700 hover:text-pink-600 transition"
-              onClick={handleLinkClick}
+              onClick={(e) => handleSmoothScroll(e, 'categories')}
             >
               Categories
             </a>
             <a
               href="#deals"
               className="block text-gray-700 hover:text-pink-600 transition"
-              onClick={handleLinkClick}
+              onClick={(e) => handleSmoothScroll(e, 'deals')}
             >
               Deals
             </a>
             <a
               href="#whats-new"
               className="block text-gray-700 hover:text-pink-600 transition"
-              onClick={handleLinkClick}
+              onClick={(e) => handleSmoothScroll(e, 'whats-new')}
             >
               What's New
             </a>
             <a
               href="#delivery"
               className="block text-gray-700 hover:text-pink-600 transition"
-              onClick={handleLinkClick}
+              onClick={(e) => handleSmoothScroll(e, 'delivery')}
             >
               Delivery
             </a>

@@ -11,6 +11,7 @@ interface Product {
   image: string;
   description: string;
   category: string;
+  features: string[];
   addedBy: string;
 }
 
@@ -30,6 +31,7 @@ export function Products() {
       const productsData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        features: doc.data().features || [], 
       })) as Product[];
       setProducts(productsData);
       setIsLoading(false);
@@ -149,7 +151,7 @@ export function Products() {
               </div>
             ) : (
               /* Products Grid */
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                 {filteredProducts.map((product) => (
                   <div key={product.id}>
                     <ProductCard {...product} />

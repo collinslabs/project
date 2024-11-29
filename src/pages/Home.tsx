@@ -7,6 +7,7 @@ import { db } from '../lib/firebase';
 import { useCartStore } from '../lib/store';
 
 
+
 interface FormData {
   name: string;
   email: string;
@@ -19,6 +20,7 @@ interface Product {
   image: string;
   description: string;
   category: string;
+  
   addedBy: string;
 }
 
@@ -270,7 +272,7 @@ const Home: React.FC = () => {
 </section>
 
        {/* Deals Section */}
-       <section id="products" className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+       <section id="deals" className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -503,7 +505,7 @@ const Home: React.FC = () => {
       {/* Footer */}
       <footer className="bg-gray-900 text-white mt-16">
         <div className="max-w-7xl mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold mb-4">About ShopHub</h3>
               <p className="text-gray-400">Your premier destination for premium electronics, audio equipment, and cutting-edge technology.</p>
@@ -519,7 +521,7 @@ const Home: React.FC = () => {
                 </a>
               </div>
             </div>
-            <div>
+            {/* <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
                 <li>
@@ -535,8 +537,8 @@ const Home: React.FC = () => {
                   <Link to="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</Link>
                 </li>
               </ul>
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <h3 className="text-lg font-semibold mb-4">Customer Service</h3>
               <ul className="space-y-2">
                 <li>
@@ -552,7 +554,7 @@ const Home: React.FC = () => {
                   <Link to="/track-order" className="text-gray-400 hover:text-white transition-colors">Track Order</Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
             <div>
               <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
               <p className="text-gray-400 mb-4">Subscribe to receive updates, access to exclusive deals, and more.</p>

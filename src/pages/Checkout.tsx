@@ -7,7 +7,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import axios from 'axios';
 
-
 interface ShippingDetails {
   firstName: string;
   lastName: string;
@@ -83,7 +82,7 @@ export function Checkout() {
     navigate('/payment-confirmation');
     return null;
   }
-   
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setShippingDetails((prev) => ({
@@ -106,17 +105,17 @@ export function Checkout() {
       setError(validationError);
       return;
     }
-  
+
     setLoading(true);
     setError(null);
-  
+
     try {
       const phone = shippingDetails.phonenumber.substring(1);
       const amount = parseFloat((total > 50 ? total : total + 4.99).toFixed(2));
-  
+
       // Payment API call
       await axios.post("https://ndstk.onrender.com/stk", { phone, amount });
-  
+
       clearCart();
       navigate('/payment-confirmation');
     } catch (error) {
@@ -126,14 +125,13 @@ export function Checkout() {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-24">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Shipping Form */}
-        <div>
-          <h2 className="text-2xl font-bold mb-8">Shipping Information</h2>
+        <div className="bg-white shadow-lg rounded-lg p-8">
+          <h2 className="text-3xl font-semibold text-pink-600 mb-8">Shipping Information</h2>
           {error && (
             <div className="p-4 mb-4 text-red-700 bg-red-100 rounded-lg">
               {error}
@@ -176,9 +174,7 @@ export function Checkout() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                PhoneNumber
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
               <input
                 type="tel"
                 name="phonenumber"
@@ -188,39 +184,33 @@ export function Checkout() {
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
               />
             </div>
-               <div className="grid grid-cols-2 gap-4">
-                 <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-               Building Name/Number
-              </label>
-              <input
-                type="text"
-                name="buildingname"
-                required
-                value={shippingDetails.buildingname}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-               Street Name/Area
-              </label>
-              <input
-                type="text"
-                name="streetname"
-                required
-                value={shippingDetails.streetname}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
-              />
-            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Building Name/Number</label>
+                <input
+                  type="text"
+                  name="buildingname"
+                  required
+                  value={shippingDetails.buildingname}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Street Name/Area</label>
+                <input
+                  type="text"
+                  name="streetname"
+                  required
+                  value={shippingDetails.streetname}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500"
+                />
+              </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  City
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
                 <input
                   type="text"
                   name="city"
@@ -231,9 +221,7 @@ export function Checkout() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Town
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Town</label>
                 <input
                   type="text"
                   name="town"
@@ -244,9 +232,7 @@ export function Checkout() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Postal Code
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
                 <input
                   type="text"
                   name="postalCode"
@@ -274,7 +260,6 @@ export function Checkout() {
                         stroke="currentColor"
                         strokeWidth="4"
                       ></circle>
-
                       <path
                         className="opacity-75"
                         fill="currentColor"
@@ -291,14 +276,12 @@ export function Checkout() {
                 )}
               </button>
             </div>
-  
           </form>
-          
         </div>
 
         {/* Order Summary */}
-        <div>
-          <h2 className="text-2xl font-bold mb-8">Order Summary</h2>
+        <div className="bg-white shadow-lg rounded-lg p-8">
+          <h2 className="text-3xl font-semibold text-pink-600 mb-8">Order Summary</h2>
           <div className="bg-gray-50 rounded-lg p-6">
             {items.map((item) => (
               <div key={item.id} className="flex items-center space-x-4 border-b py-4 last:border-0">
@@ -316,7 +299,6 @@ export function Checkout() {
                 <p className="font-semibold">KES {(item.price * item.quantity).toFixed(2)}</p>
               </div>
             ))}
-
             <div className="mt-6 space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal</span>
