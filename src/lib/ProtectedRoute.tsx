@@ -13,6 +13,6 @@ export const ProtectedRoute = ({ element, allowedEmail }: ProtectedRouteProps) =
   if (userEmail === allowedEmail) {
     return element; // Render the protected component
   } else {
-    return <Navigate to="/signin" replace />; // Redirect to SignIn if not authorized
+    return <Navigate to="/" replace />; // Redirect to SignIn if not authorized
   }
 };
