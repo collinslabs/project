@@ -114,7 +114,7 @@ export function Checkout() {
       const amount = parseFloat((total > 50 ? total : total + 4.99).toFixed(2));
 
       // Payment API call
-      await axios.post("https://ndstk.onrender.com/stk", { phone, amount });
+      await axios.post("https://ndstk.onrender.com/api/stk", { phone, amount });
 
       clearCart();
       navigate('/payment-confirmation');
