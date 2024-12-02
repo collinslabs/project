@@ -28,53 +28,69 @@ interface Product {
 
 const CATEGORIES = [
   {
-    id: 'electronics',
-    name: 'Electronics',
-    image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661',
-    description: 'Latest gadgets and tech accessories',
+    id: 'vibrators',
+    name: 'Vibrators',
+    image: 'https://images.unsplash.com/photo-1616783335090-ec6e7ac63975?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHZpYnJhdG9yc3xlbnwwfHwwfHx8MA%3D%3D',
+    description: 'Discover premium vibrators designed to enhance pleasure and comfort, made with high-quality materials for your satisfaction.',
   },
   {
-    id: 'audio',
-    name: 'Audio',
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e',
-    description: 'Premium headphones and speakers',
+    id: 'lubricants',
+    name: 'Lubricants',
+    image: 'https://images.unsplash.com/photo-1605668675507-b4d7082fb595?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bHVicmljYW50fGVufDB8fDB8fHww',
+    description: 'Experience a smooth, comfortable sensation with our top-rated lubricants, designed for ultimate pleasure and ease.',
   },
   {
-    id: 'wearables',
-    name: 'Wearables',
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30',
-    description: 'Smart watches and fitness trackers',
+    id: 'massage',
+    name: 'Massage & Bodycare',
+    image: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fG1hc3NhZ2UlMjBhbmQlMjBib2R5Y2FyZXxlbnwwfHwwfHx8MA%3D%3D',
+    description: 'Indulge in relaxation with our luxurious massage products, carefully crafted for your wellness and intimate moments.',
   },
   {
-    id: 'cameras',
-    name: 'Cameras',
-    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32',
-    description: 'Professional cameras and accessories',
+    id: 'intimate-wear',
+    name: 'Intimate Apparel & Accessories',
+    image: 'https://plus.unsplash.com/premium_photo-1661456408281-312fd0059de9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8aW50aW1hdGUlMjB3ZWFyfGVufDB8fDB8fHww',
+    description: 'Explore a selection of intimate apparel and accessories, designed for comfort, confidence, and self-expression.',
+  },
+  {
+    id: 'kink',
+    name: 'Kink & BDSM',
+    image: 'https://images.unsplash.com/photo-1581794236300-acd130bf0035?w=294&dpr=1&h=294&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXRodW1ibmFpbHx8UTJQbVdYSnhVckl8fGVufDB8fHx8fA%3D%3D',
+    description: 'Explore tasteful and safe kink and BDSM products, designed to enhance your intimate experiences with respect and care.',
   },
 ];
+
 
 const slides = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+    image: "https://images.unsplash.com/photo-1593526659358-5f1489f8efa2?w=294&dpr=1&h=294&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXRodW1ibmFpbHx8OTkwMTUyNXx8ZW58MHx8fHx8",
     title: "Welcome to ShopHub",
-    description: "Discover our curated collection of premium products",
+    description: "Explore our exclusive collection of thoughtfully curated,premium products designed to enhance your pleasure and well-being. Each item is carefully selected for its quality, safety, and sophistication.",
     link: "/products",
+    additionalText: "Experience a discreet and personalized shopping journey, with secure, private transactions and fast, reliable delivery. Your satisfaction and privacy are our top priorities.",
+    callToAction: "Browse Our Curated Selection Now"
   },
+  
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1523381212069-47a79c0ca3eb",
-    title: "Latest Fashion Trends",
-    description: "Step into style with our new arrivals.",
-    link: "/fashion",
+    image: "https://plus.unsplash.com/premium_photo-1700028099087-2330d98e860a?w=294&dpr=1&h=294&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXRodW1ibmFpbHx8eG5yVkNZQ2xpb2N8fGVufDB8fHx8fA%3D%3D",
+    title: "Discover Your Perfect Match",
+    description: "Browse our latest arrivals, featuring a premium selection of products designed for your ultimate comfort and pleasure. Each item is chosen with care to ensure safety, satisfaction, and a personalized experience.",
+    link: "/products",
+    additionalText: "Whether you're new to our collection or a returning customer, we guarantee discreet packaging and fast, secure shipping. Your privacy and satisfaction are our top priorities.",
+    callToAction: "Explore Our Latest Selection Now"
   },
+  
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f",
-    title: "Gadget Deals",
-    description: "Upgrade your tech with unbeatable offers.",
-    link: "/gadgets",
-  },
+    image: "https://images.unsplash.com/photo-1579006318110-42d7992b6635?w=294&dpr=1&h=294&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXRodW1ibmFpbHx8MTIyMTQ3OTV8fGVufDB8fHx8fA%3D%3D",
+    title: "Intimate Wellness & Pleasure",
+    description: "Explore our thoughtfully curated selection of intimate wellness products designed to enhance your pleasure and well-being. Enjoy premium, body-safe materials, and products that prioritize comfort and satisfaction.",
+    link: "/products",
+    additionalText: "With a focus on privacy, each order is discreetly packaged and shipped with care. Experience shopping with confidence, knowing your personal information and purchases are always secure.",
+    callToAction: "Discover Your Pleasure Now"
+  }
+  
 ];
 
 
@@ -167,90 +183,118 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-rose-50 to-purple-50 shadow-lg">
       {/* Hero Section */}
-      <section className="relative bg-gray-900 h-[600px] overflow-hidden">
-      {slides.map((slide, index) => (
-        <div
-          key={slide.id}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"}`}
-        >
-          <img
-            src={slide.image}
-            alt={slide.title}
-            className="w-full h-full object-cover opacity-50"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center text-white">
-              <h1 className="text-5xl font-bold mb-4">{slide.title}</h1>
-              <p className="text-xl mb-8">{slide.description}</p>
-              <Link
-                to={slide.link}
-                className="inline-flex items-center bg-pink-600 text-white px-8 py-3 rounded-lg hover:bg-pink-700 transition-colors"
-              >
-                Shop Now
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </div>
-          </div>
+      <section className="relative bg-gradient-to-r from-gray-900 to-gray-800 h-[600px] overflow-hidden">
+  {slides.map((slide, index) => (
+    <div
+      key={slide.id}
+      className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"}`}
+    >
+      <img
+        src={slide.image}
+        alt={slide.title}
+        className="w-full h-full object-cover opacity-60"
+        loading="lazy"
+      />
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+        <div className="text-center text-white p-5 md:p-10">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4">{slide.title}</h1>
+          <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto">{slide.description}</p>
+          <Link
+            to={slide.link}
+            className="inline-flex items-center bg-pink-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-pink-700 transition-colors"
+          >
+            {slide.callToAction}
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
+          <p className="mt-4 text-sm">{slide.additionalText}</p>
         </div>
-      ))}
-      {/* Navigation Buttons */}
-      <button
-        onClick={handlePrevSlide}
-        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-3 hover:bg-gray-700 transition"
-      >
-        <ChevronLeft className="h-6 w-6" />
-      </button>
-      <button
-        onClick={handleNextSlide}
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-3 hover:bg-gray-700 transition"
-      >
-        <ChevronRight className="h-6 w-6" />
-      </button>
-      {/* Dots Navigation */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full ${index === currentSlide ? "bg-pink-600" : "bg-gray-400"} transition`}
-          ></button>
-        ))}
       </div>
-    </section>
+    </div>
+  ))}
+  {/* Navigation Buttons */}
+  <button
+    onClick={handlePrevSlide}
+    className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-3 hover:bg-gray-700 transition"
+  >
+    <ChevronLeft className="h-6 w-6" />
+  </button>
+  <button
+    onClick={handleNextSlide}
+    className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-3 hover:bg-gray-700 transition"
+  >
+    <ChevronRight className="h-6 w-6" />
+  </button>
+  {/* Dots Navigation */}
+  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+    {slides.map((_, index) => (
+      <button
+        key={index}
+        onClick={() => setCurrentSlide(index)}
+        className={`w-3 h-3 rounded-full ${index === currentSlide ? "bg-pink-600" : "bg-gray-400"} transition`}
+      ></button>
+    ))}
+  </div>
+</section>
 
       {/* Features Section */}
       <section className="max-w-7xl mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <ShoppingBag className="mx-auto h-12 w-12 text-pink-600" />
-            <h3 className="mt-4 text-xl font-semibold">Premium Selection</h3>
-            <p className="mt-2 text-gray-600">Curated products from top brands</p>
-          </div>
-          <div className="text-center">
-            <Truck className="mx-auto h-12 w-12 text-pink-600" />
-            <h3 className="mt-4 text-xl font-semibold">Fast Delivery</h3>
-            <p className="mt-2 text-gray-600">Free shipping on orders</p>
-          </div>
-          <div className="text-center">
-            <Shield className="mx-auto h-12 w-12 text-pink-600" />
-            <h3 className="mt-4 text-xl font-semibold">Secure Shopping</h3>
-            <p className="mt-2 text-gray-600">100% secure payment</p>
-          </div>
+        <div className="text-center bg-pink-50 p-6 rounded-lg shadow-lg">
+           <ShoppingBag className="mx-auto h-12 w-12 text-pink-600" />
+           <h3 className="mt-4 text-xl font-semibold text-pink-700">
+              Premium Collection of Intimate Products
+          </h3>
+          <p className="mt-2 text-md text-gray-700">
+           Discover a curated selection of high-quality, body-safe products from top-rated brands, designed to elevate your experience. 
+           Whether you're looking for personal pleasure, enhanced intimacy, or self-care, we offer a wide range of products to suit your needs.
+          </p>
+          <p className="mt-4 text-gray-500">
+          Every product is carefully vetted for safety, durability, and satisfaction. Shop with confidence knowing you're investing in your well-being.
+          </p>
+  
+         </div>
+
+          <div className="text-center bg-pink-50 p-6 rounded-lg shadow-lg">
+             <Truck className="mx-auto h-12 w-12 text-pink-600" />
+                 <h3 className="mt-4 text-xl font-semibold text-pink-700">
+                   Fast & Discreet Delivery
+                 </h3>
+               <p className="mt-2 text-md text-gray-700">
+              We understand the importance of privacy and convenience. Enjoy free, fast, and discreet shipping on all orders, so you can receive your products with confidence and peace of mind.
+             </p>
+             <p className="mt-4 text-gray-500">
+             Our shipping process is swift and confidential, ensuring your order arrives quickly and without a hassle. Shop with complete discretion, and let us handle the rest.
+             </p>
+            </div>
+
+            <div className="text-center bg-pink-50 p-6 rounded-lg shadow-lg">
+                <Shield className="mx-auto h-12 w-12 text-pink-600" />
+                <h3 className="mt-4 text-xl font-semibold text-pink-700">
+                   Secure & Private Shopping
+                 </h3>
+                <p className="mt-2 text-md text-gray-700">
+                   Shop with complete confidence knowing your personal information and payment details are protected. Our secure payment gateway ensures your privacy at every step of your purchase.
+                 </p>
+                <p className="mt-4 text-gray-500">
+                We use industry-leading encryption technology to safeguard your payment information. Your transaction will be discreet, secure, and handled with the utmost care, so you can focus on enjoying your shopping experience.
+            </p>
+           </div>
+
         </div>
       </section>
 
       {/* Categories Section */}
       <section id="categories" className="max-w-7xl mx-auto px-6 py-16">
-  <div className="text-center mb-14">
-    <h2 className="text-4xl font-extrabold text-gray-900 mb-5">
-      Shop By Category
-    </h2>
-    <p className="text-lg text-gray-500">
-      Discover premium products tailored to your needs
-    </p>
-  </div>
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="text-center mb-14">
+         <h2 className="text-2xl font-extrabold text-gray-900 mb-5">
+                 Explore Our Premium Collection
+           </h2>
+          <p className="text-md text-gray-500">
+         Discover high-quality, thoughtfully designed products that prioritize your comfort, privacy, and well-being. Shop with confidence and experience a more fulfilling lifestyle.
+       </p>
+     </div>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
     {CATEGORIES.map((category) => (
       <Link key={category.id} to={`/products?category=${category.id}`}>
       <div className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
@@ -274,14 +318,15 @@ const Home: React.FC = () => {
        {/* Deals Section */}
        <section id="deals" className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Today's Best Product Deals
-          </h2>
-          <p className="text-lg text-gray-600">
-            Unbeatable prices on top-rated products
-          </p>
-        </div>
+      <div className="text-center mb-12">
+       <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Discover Today's Best Offers on Premium Products
+              </h2>
+            <p className="text-lg text-gray-600">
+            Enjoy unbeatable prices on top-quality products that prioritize your comfort, pleasure, and well-being. Shop with confidence and explore our carefully curated collection.
+             </p>
+          </div>
+
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Directly slicing the products array in the map */}
@@ -347,10 +392,10 @@ const Home: React.FC = () => {
     <section id="delivery" className="bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-12">
-          <p className="mt-4 text-lg text-gray-600">
-            We ensure your orders are delivered quickly and securely across the
-            country, with your privacy and satisfaction guaranteed.
-          </p>
+        <p className="mt-4 text-lg text-gray-600">
+        Your privacy and satisfaction are our top priorities. We ensure discreet, fast, and secure delivery of your orders to any location, with no details shared beyond what’s necessary. Shop with confidence, knowing that we uphold the highest standards of care and professionalism in handling your personal information and products.
+       </p>
+
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-6">
@@ -508,7 +553,7 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold mb-4">About ShopHub</h3>
-              <p className="text-gray-400">Your premier destination for premium electronics, audio equipment, and cutting-edge technology.</p>
+              <p className="text-gray-400">Your trusted destination for high-quality, thoughtfully designed products that prioritize your comfort, pleasure, and personal well-being. Explore a curated selection of premium items, all crafted with care and discretion to enhance your intimate experiences.</p>
               <div className="flex space-x-4 mt-4">
                 <a href="#" className="hover:text-pink-400 transition-colors">
                   <Facebook className="h-5 w-5" />

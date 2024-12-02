@@ -1,61 +1,121 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useCartStore } from '../lib/store';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCartStore } from "../lib/store";
 
 export function PaymentConfirmation() {
   const navigate = useNavigate();
-  const { items, clearCart } = useCartStore();
-  const [searchParams] = useSearchParams();
+  const { items, clearCart } = useCartStore(); // Added clearCart to clear items after a successful purchase
   const [loading, setLoading] = useState(true);
-  const [paymentStatus, setPaymentStatus] = useState<null | 'success' | 'failed'>(null); // Type updated here
+  const [paymentStatus, setPaymentStatus] = useState<null | "success" | "failed">(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const POLLING_INTERVAL = 3000; // 3 seconds
+  const TIMEOUT_DURATION = 60000; // 60 seconds
 
   useEffect(() => {
-    const fetchPaymentStatus = async () => {
-      setLoading(true);
-      const transactionId = searchParams.get('transactionId');
+    let timeoutId: NodeJS.Timeout;
+    let pollingId: NodeJS.Timeout;
 
-      if (!transactionId) {
-        setPaymentStatus('failed');
-        setLoading(false);
-        return;
-      }
-
+    const fetchTransactionAndPaymentStatus = async () => {
       try {
-        const response = await fetch(`/payment-status?transactionId=${transactionId}`);
-        const data = await response.json();
-        setPaymentStatus(data.status as 'success' | 'failed'); // Type assertion
-        if (data.status === 'success') {
-          clearCart();
+        // Fetch transaction ID from the backend
+        const response = await fetch(`/api/transaction`);
+        if (!response.ok) {
+          throw new Error(`Error fetching transaction ID: ${response.statusText}`);
         }
-      } catch (error) {
-        console.error("Error fetching payment status:", error);
-        setPaymentStatus('failed');
+    
+        const contentType = response.headers.get("Content-Type");
+        if (!contentType?.includes("application/json")) {
+          throw new Error("Expected JSON response, but received non-JSON data.");
+        }
+    
+        const { transactionId } = await response.json();
+    
+        if (!transactionId) {
+          throw new Error("Transaction ID not found.");
+        }
+    
+        // Use the transaction ID to fetch the payment status
+        const statusResponse = await fetch(`/api/transaction?transactionId=${transactionId}`);
+        if (!statusResponse.ok) {
+          throw new Error(`Error fetching payment status: ${statusResponse.statusText}`);
+        }
+    
+        const statusContentType = statusResponse.headers.get("Content-Type");
+        if (!statusContentType?.includes("application/json")) {
+          throw new Error("Expected JSON response for payment status, but received non-JSON data.");
+        }
+    
+        const data = await statusResponse.json();
+    
+        if (data.status === "success") {
+          setPaymentStatus("success");
+          clearCart(); // Clear cart on successful payment
+          clearTimeout(timeoutId);
+          clearInterval(pollingId);
+        } else {
+          setPaymentStatus("failed");
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Failed to validate payment. Please try again later.");
+        clearTimeout(timeoutId);
+        clearInterval(pollingId);
       } finally {
         setLoading(false);
       }
     };
+    
 
-    fetchPaymentStatus();
-  }, [searchParams, clearCart]);
+    const startPolling = () => {
+      pollingId = setInterval(() => {
+        fetchTransactionAndPaymentStatus();
+      }, POLLING_INTERVAL);
+
+      timeoutId = setTimeout(() => {
+        clearInterval(pollingId);
+        setLoading(false);
+        setError("Transaction processing took too long. Please try again later.");
+      }, TIMEOUT_DURATION);
+    };
+
+    startPolling();
+
+    return () => {
+      clearInterval(pollingId);
+      clearTimeout(timeoutId);
+    };
+  }, [clearCart]);
 
   if (loading) {
+    return <div>Loading...</div>; // Replace with a spinner if needed
+  }
+
+  if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg font-medium">Verifying payment...</p>
+      <div className="max-w-3xl mx-auto px-4 py-24">
+        <h2 className="text-2xl font-bold text-red-600">Error</h2>
+        <p className="mt-4 text-gray-600">{error}</p>
+        <button
+          className="mt-6 px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+          onClick={() => navigate("/checkout")}
+        >
+          Return to Checkout
+        </button>
       </div>
     );
   }
 
-  if (paymentStatus !== 'success') {
+  if (paymentStatus === "failed") {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="max-w-3xl mx-auto px-4 py-24">
         <h2 className="text-2xl font-bold text-red-600">Payment Failed</h2>
         <p className="mt-4 text-gray-600">
           Your payment was not successful. Please try again.
         </p>
         <button
           className="mt-6 px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
-          onClick={() => navigate('/checkout')}
+          onClick={() => navigate("/checkout")}
         >
           Return to Checkout
         </button>
@@ -94,7 +154,7 @@ export function PaymentConfirmation() {
         <div className="mt-6 flex justify-end">
           <button
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
           >
             Return to Home
           </button>
