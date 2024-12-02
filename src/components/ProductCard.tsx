@@ -27,7 +27,7 @@ export function ProductCard({ id, name, price, image, description, features = []
         className="w-full h-48 object-cover"
       />
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-900">{name}</h3>
+        <h3 className="text-md font-semibold text-gray-900">{name}</h3>
         <p className="mt-1 text-gray-500 text-sm line-clamp-2">{description}</p>
 
         {/* Display features */}
