@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
@@ -27,7 +27,6 @@ export function SignIn() {
         auth,
         formData.email,
         formData.password
-        
       );
   
       const userId = userCredential.user.uid;
@@ -41,7 +40,7 @@ export function SignIn() {
         // Store email in localStorage
         localStorage.setItem("userEmail", formData.email);
   
-        setSuccessMessage(`Welcome back, ${userData.name}!`);
+        setSuccessMessage(`Welcome back, ${userData.name}! Your privacy and comfort are our top priorities.`);
         setError('');
   
         setTimeout(() => {
@@ -60,7 +59,8 @@ export function SignIn() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 animate-gradient-background">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Sign In</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Welcome Back</h2>
+        <p className="text-center text-gray-600 mb-4">We are committed to your privacy and a seamless experience.</p>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
