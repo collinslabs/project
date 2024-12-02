@@ -34,6 +34,12 @@ const CATEGORIES = [
     description: 'Discover premium vibrators designed to enhance pleasure and comfort, made with high-quality materials for your satisfaction.',
   },
   {
+    id: 'dildos',
+    name: 'Dildos',
+    image: 'https://images.unsplash.com/photo-1616782910736-07684b1a62be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZGlsZG9zfGVufDB8fDB8fHww',
+    description: 'Discover premium dildos designed to enhance pleasure and comfort, made with high-quality materials',
+  },
+  {
     id: 'lubricants',
     name: 'Lubricants',
     image: 'https://images.unsplash.com/photo-1605668675507-b4d7082fb595?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bHVicmljYW50fGVufDB8fDB8fHww',
@@ -67,7 +73,6 @@ const slides = [
     title: "Welcome to ShopHub",
     description: "Explore our exclusive collection of thoughtfully curated,premium products designed to enhance your pleasure and well-being. Each item is carefully selected for its quality, safety, and sophistication.",
     link: "/products",
-    additionalText: "Experience a discreet and personalized shopping journey, with secure, private transactions and fast, reliable delivery. Your satisfaction and privacy are our top priorities.",
     callToAction: "Browse Our Curated Selection Now"
   },
   
@@ -77,7 +82,6 @@ const slides = [
     title: "Discover Your Perfect Match",
     description: "Browse our latest arrivals, featuring a premium selection of products designed for your ultimate comfort and pleasure. Each item is chosen with care to ensure safety, satisfaction, and a personalized experience.",
     link: "/products",
-    additionalText: "Whether you're new to our collection or a returning customer, we guarantee discreet packaging and fast, secure shipping. Your privacy and satisfaction are our top priorities.",
     callToAction: "Explore Our Latest Selection Now"
   },
   
@@ -87,7 +91,6 @@ const slides = [
     title: "Intimate Wellness & Pleasure",
     description: "Explore our thoughtfully curated selection of intimate wellness products designed to enhance your pleasure and well-being. Enjoy premium, body-safe materials, and products that prioritize comfort and satisfaction.",
     link: "/products",
-    additionalText: "With a focus on privacy, each order is discreetly packaged and shipped with care. Experience shopping with confidence, knowing your personal information and purchases are always secure.",
     callToAction: "Discover Your Pleasure Now"
   }
   
@@ -206,7 +209,7 @@ const Home: React.FC = () => {
             {slide.callToAction}
             <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
-          <p className="mt-4 text-sm">{slide.additionalText}</p>
+  
         </div>
       </div>
     </div>
@@ -248,9 +251,6 @@ const Home: React.FC = () => {
            Discover a curated selection of high-quality, body-safe products from top-rated brands, designed to elevate your experience. 
            Whether you're looking for personal pleasure, enhanced intimacy, or self-care, we offer a wide range of products to suit your needs.
           </p>
-          <p className="mt-4 text-gray-500">
-          Every product is carefully vetted for safety, durability, and satisfaction. Shop with confidence knowing you're investing in your well-being.
-          </p>
   
          </div>
 
@@ -262,9 +262,6 @@ const Home: React.FC = () => {
                <p className="mt-2 text-md text-gray-700">
               We understand the importance of privacy and convenience. Enjoy free, fast, and discreet shipping on all orders, so you can receive your products with confidence and peace of mind.
              </p>
-             <p className="mt-4 text-gray-500">
-             Our shipping process is swift and confidential, ensuring your order arrives quickly and without a hassle. Shop with complete discretion, and let us handle the rest.
-             </p>
             </div>
 
             <div className="text-center bg-pink-50 p-6 rounded-lg shadow-lg">
@@ -275,9 +272,6 @@ const Home: React.FC = () => {
                 <p className="mt-2 text-md text-gray-700">
                    Shop with complete confidence knowing your personal information and payment details are protected. Our secure payment gateway ensures your privacy at every step of your purchase.
                  </p>
-                <p className="mt-4 text-gray-500">
-                We use industry-leading encryption technology to safeguard your payment information. Your transaction will be discreet, secure, and handled with the utmost care, so you can focus on enjoying your shopping experience.
-            </p>
            </div>
 
         </div>
@@ -294,7 +288,7 @@ const Home: React.FC = () => {
        </p>
      </div>
 
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {CATEGORIES.map((category) => (
       <Link key={category.id} to={`/products?category=${category.id}`}>
       <div className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">

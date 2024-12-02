@@ -21,7 +21,7 @@ export function Admin() {
     price: 0,
     image: '',
     description: '',
-    category: 'electronics',
+    category: 'vibrators',
     features: [],
     addedBy: 'collinsyegon816@gmail.com',
   });
@@ -81,7 +81,7 @@ export function Admin() {
         price: 0,
         image: '',
         description: '',
-        category: 'electronics',
+        category: 'vibrators',
         features: [],
         addedBy: 'collinsyegon816@gmail.com',
       });
@@ -191,10 +191,12 @@ export function Admin() {
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500"
               >
-                <option value="electronics">Electronics</option>
-                <option value="audio">Audio</option>
-                <option value="wearables">Wearables</option>
-                <option value="cameras">Cameras</option>
+                <option value="vibrators">Vibrators</option>
+                <option value="dildos">Dildos</option>
+                <option value="lubricants">Lubricants</option>
+                <option value="massage">Massage & Bodycare</option>
+                <option value="intimate-wear">Intimate Apparel & Accessories</option>
+                <option value="kink">Kink & BDSM</option>
               </select>
             </div>
 

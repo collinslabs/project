@@ -21,7 +21,7 @@ export function Products() {
   const [sortBy, setSortBy] = useState('featured');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export function Products() {
                   <input
                     type="range"
                     min="0"
-                    max="1000"
+                    max="10000"
                     value={priceRange[1]}
                     onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                     className="w-full"

@@ -128,7 +128,7 @@ export const ProductDetail = () => {
           <div className="bg-pink-50 border border-pink-200 rounded-lg p-4 flex items-center">
             <TruckIcon />
             <p className="ml-2 text-gray-700">
-              Free Express Shipping on Orders Above KES 5,000
+              Free Express Shipping on Orders 
             </p>
           </div>
 
