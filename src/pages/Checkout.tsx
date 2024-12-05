@@ -114,8 +114,12 @@ export function Checkout() {
       const amount = parseFloat((total > 0 ? total : total + 4.99).toFixed(2));
   
       // Payment API call
-      await axios.post("https://ndstk.onrender.com/api/stk", { phone, amount });
+
   
+
+
+      await axios.post("https://ndstk.onrender.com/api/stk", { phone, amount });
+
       clearCart();
   
       // Wait for 3 minutes (180000 ms) before navigating
