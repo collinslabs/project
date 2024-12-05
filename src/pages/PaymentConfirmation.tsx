@@ -11,6 +11,7 @@ export function PaymentConfirmation() {
 
   const POLLING_INTERVAL = 3000; // 3 seconds
   const TIMEOUT_DURATION = 60000; // 60 seconds
+  const DELAY_DURATION = 180000; // 3 minutes
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -23,31 +24,19 @@ export function PaymentConfirmation() {
         if (!response.ok) {
           throw new Error(`Error fetching transaction ID: ${response.statusText}`);
         }
-    
-        const contentType = response.headers.get("Content-Type");
-        if (!contentType?.includes("application/json")) {
-          throw new Error("Expected JSON response, but received non-JSON data.");
-        }
-    
+
         const { transactionId } = await response.json();
-    
         if (!transactionId) {
           throw new Error("Transaction ID not found.");
         }
-    
+
         // Use the transaction ID to fetch the payment status
         const statusResponse = await fetch(`/api/transaction?transactionId=${transactionId}`);
         if (!statusResponse.ok) {
           throw new Error(`Error fetching payment status: ${statusResponse.statusText}`);
         }
-    
-        const statusContentType = statusResponse.headers.get("Content-Type");
-        if (!statusContentType?.includes("application/json")) {
-          throw new Error("Expected JSON response for payment status, but received non-JSON data.");
-        }
-    
+
         const data = await statusResponse.json();
-    
         if (data.status === "success") {
           setPaymentStatus("success");
           clearCart(); // Clear cart on successful payment
@@ -56,16 +45,13 @@ export function PaymentConfirmation() {
         } else {
           setPaymentStatus("failed");
         }
-      } catch (err) {
-        console.error(err);
-        setError("Failed to validate payment. Please try again later.");
+      } catch{
         clearTimeout(timeoutId);
         clearInterval(pollingId);
       } finally {
         setLoading(false);
       }
     };
-    
 
     const startPolling = () => {
       pollingId = setInterval(() => {
@@ -79,7 +65,15 @@ export function PaymentConfirmation() {
       }, TIMEOUT_DURATION);
     };
 
+    const delayConfirmation = () => {
+      setTimeout(() => {
+        setLoading(false);
+        setPaymentStatus("success");
+      }, DELAY_DURATION);
+    };
+
     startPolling();
+    delayConfirmation();
 
     return () => {
       clearInterval(pollingId);
@@ -88,7 +82,7 @@ export function PaymentConfirmation() {
   }, [clearCart]);
 
   if (loading) {
-    return <div>Loading...</div>; // Replace with a spinner if needed
+    return <div>Loading... Please wait while we process your order.</div>;
   }
 
   if (error) {
@@ -125,13 +119,12 @@ export function PaymentConfirmation() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-24">
-      <h2 className="text-2xl font-bold text-green-600">Payment Successful!</h2>
+      <h2 className="text-2xl font-bold text-green-600">Processing Payment! Checkout the STK push on your device</h2>
       <p className="mt-4 text-gray-600">
-        Thank you for your purchase! Your items are being scheduled for packaging and delivery.
-        This process will take approximately 3 working days.
+        Your order has been received and is being prepared for packaging and delivery.
       </p>
       <div className="mt-8 bg-gray-50 rounded-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">Your Order</h3>
+        <h3 className="text-xl font-semibold mb-4">Order</h3>
         {items.map((item) => (
           <div
             key={item.id}

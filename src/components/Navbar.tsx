@@ -34,7 +34,7 @@ export function Navbar() {
             <Link to="/" className="flex-shrink-0 flex items-center text-pink-600">
               <div className="flex items-center">
                 <ShoppingCart className="h-6 w-6 mr-1" />
-                <h1 className="text-xl font-semibold">Luna Luxe</h1>
+                <h1 className="text-xl font-semibold">SensaLuxe</h1>
               </div>
             </Link>
             <div className="hidden md:flex md:ml-6 md:space-x-8">
@@ -51,13 +51,6 @@ export function Navbar() {
                 onClick={(e) => handleSmoothScroll(e, 'deals')}
               >
                 Deals
-              </a>
-              <a
-                href="#whats-new"
-                className="text-gray-700 hover:text-pink-600 transition"
-                onClick={(e) => handleSmoothScroll(e, 'whats-new')}
-              >
-                What's New
               </a>
               <a
                 href="#delivery"

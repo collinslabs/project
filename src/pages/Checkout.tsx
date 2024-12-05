@@ -105,19 +105,23 @@ export function Checkout() {
       setError(validationError);
       return;
     }
-
+  
     setLoading(true);
     setError(null);
-
+  
     try {
       const phone = shippingDetails.phonenumber.substring(1);
       const amount = parseFloat((total > 0 ? total : total + 4.99).toFixed(2));
-
+  
       // Payment API call
-      await axios.post("http://localhost:8000/api/stk", { phone, amount });
-
+      await axios.post("http://localhost:5173/api/stk", { phone, amount });
+  
       clearCart();
-      navigate('/payment-confirmation');
+  
+      // Wait for 3 minutes (180000 ms) before navigating
+      setTimeout(() => {
+        navigate('/payment-confirmation');
+      }, 180000); // 3 minutes
     } catch (error) {
       console.error('Payment failed:', error);
       setError('Payment processing failed. Please try again.');
@@ -125,6 +129,7 @@ export function Checkout() {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-24">
