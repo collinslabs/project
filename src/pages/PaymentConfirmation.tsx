@@ -12,12 +12,11 @@ export function PaymentConfirmation() {
   const DELAY_DURATION = 3000; // 3 seconds delay for simulation
 
   useEffect(() => {
-    // Simulate a delay to mimic payment processing
     const delayConfirmation = setTimeout(() => {
-      const isSuccess = Math.random() > 0.3; // Simulate random success/failure
+      const isSuccess = Math.random() > 0.3;
       if (isSuccess) {
         setPaymentStatus("success");
-        clearCart(); // Clear cart on success
+        clearCart();
       } else {
         setPaymentStatus("failed");
       }
@@ -30,16 +29,23 @@ export function PaymentConfirmation() {
   }, [clearCart]);
 
   if (loading) {
-    return <div>Loading... Please wait while we process your order.</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-pink-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-pink-500 border-opacity-50 mb-6"></div>
+          <p className="text-pink-600 font-semibold">Processing your payment...</p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-24">
-        <h2 className="text-2xl font-bold text-red-600">Error</h2>
+      <div className="max-w-3xl mx-auto px-6 py-24 bg-pink-50 rounded-lg shadow-lg text-center">
+        <h2 className="text-3xl font-bold text-pink-600">Oops! Something went wrong</h2>
         <p className="mt-4 text-gray-600">{error}</p>
         <button
-          className="mt-6 px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+          className="mt-6 px-6 py-3 bg-pink-500 text-white rounded-full hover:bg-pink-600 shadow-lg"
           onClick={() => navigate("/checkout")}
         >
           Return to Checkout
@@ -50,13 +56,13 @@ export function PaymentConfirmation() {
 
   if (paymentStatus === "failed") {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-24">
-        <h2 className="text-2xl font-bold text-red-600">Payment Failed</h2>
+      <div className="max-w-3xl mx-auto px-6 py-24 bg-pink-50 rounded-lg shadow-lg text-center">
+        <h2 className="text-3xl font-bold text-red-500">Payment Failed</h2>
         <p className="mt-4 text-gray-600">
-          Your payment was not successful. Please try again.
+          Unfortunately, your payment was not successful. Please try again.
         </p>
         <button
-          className="mt-6 px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+          className="mt-6 px-6 py-3 bg-pink-500 text-white rounded-full hover:bg-pink-600 shadow-lg"
           onClick={() => navigate("/checkout")}
         >
           Return to Checkout
@@ -66,10 +72,15 @@ export function PaymentConfirmation() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-24">
-      <h2 className="text-2xl font-bold text-green-600">Processing Payment! Checkout the STK push on your device</h2>
-        <h3 className="text-xl font-semibold mb-4">Order</h3>
-
+    <div className="max-w-4xl mx-auto px-6 py-24 bg-pink-50 rounded-lg shadow-lg">
+      <h2 className="text-3xl font-bold text-pink-600 text-center mb-8">
+        Your Order is Being Processed
+      </h2>
+      <p className="text-center text-gray-600 mb-6">
+        Please check the STK push on your phone to complete the payment.
+      </p>
+      <div className="mb-8">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4"></h3>
         {items.map((item) => (
           <div
             key={item.id}
@@ -78,28 +89,28 @@ export function PaymentConfirmation() {
             <img
               src={item.image}
               alt={item.name}
-              className="w-16 h-16 object-cover rounded-lg"
+              className="w-16 h-16 object-cover rounded-lg border border-pink-100 shadow-sm"
             />
             <div className="flex-1">
-              <h3 className="font-semibold">{item.name}</h3>
-              <p className="text-gray-600">
+              <h3 className="font-semibold text-gray-800">{item.name}</h3>
+              <p className="text-pink-500">
                 KES {item.price} × {item.quantity}
               </p>
             </div>
-            <p className="font-semibold">
+            <p className="font-semibold text-gray-700">
               KES {(item.price * item.quantity).toFixed(2)}
             </p>
           </div>
         ))}
-        <div className="mt-6 flex justify-end">
-          <button
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            onClick={() => navigate("/")}
-          >
-            Return to Home
-          </button>
-        </div>
       </div>
-
+      <div className="flex justify-center">
+        <button
+          className="px-8 py-3 bg-pink-500 text-white rounded-full hover:bg-pink-600 shadow-lg transition"
+          onClick={() => navigate("/")}
+        >
+          Return to Home
+        </button>
+      </div>
+    </div>
   );
 }

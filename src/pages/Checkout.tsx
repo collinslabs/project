@@ -79,7 +79,7 @@ export function Checkout() {
   }, [navigate]);
 
   if (items.length === 0) {
-    navigate('');
+    navigate('/payment-confirmation');
     return null;
   }
 
