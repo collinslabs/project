@@ -67,14 +67,9 @@ export function PaymentConfirmation() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-24">
-      <h2 className="text-2xl font-bold text-green-600">
-        Payment Successful!
-      </h2>
-      <p className="mt-4 text-gray-600">
-        Your order has been received and is being prepared for packaging and delivery.
-      </p>
-      <div className="mt-8 bg-gray-50 rounded-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
+      <h2 className="text-2xl font-bold text-green-600">Processing Payment! Checkout the STK push on your device</h2>
+        <h3 className="text-xl font-semibold mb-4">Order</h3>
+
         {items.map((item) => (
           <div
             key={item.id}
@@ -105,6 +100,6 @@ export function PaymentConfirmation() {
           </button>
         </div>
       </div>
-    </div>
+  
   );
 }
