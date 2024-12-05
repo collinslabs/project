@@ -76,11 +76,8 @@ export function PaymentConfirmation() {
   <h2 className="text-3xl font-bold text-pink-600 text-center mb-8">
     Your Order is Being Processed
   </h2>
-  <p className="text-center text-gray-600 mb-6">
-    Please check the STK push on your phone to complete the payment.
-  </p>
   <h3 className="text-xl font-semibold text-gray-800 text-center mb-6">
-    Once your payment is successful, you will receive an SMS to track your order.
+    Once your payment is confirmed, you will receive an SMS to track your order.
   </h3>
   <div className="mb-8">
     {items.map((item) => (
