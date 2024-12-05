@@ -4,80 +4,28 @@ import { useCartStore } from "../lib/store";
 
 export function PaymentConfirmation() {
   const navigate = useNavigate();
-  const { items, clearCart } = useCartStore(); // Added clearCart to clear items after a successful purchase
+  const { items, clearCart } = useCartStore();
   const [loading, setLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState<null | "success" | "failed">(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
 
-  const POLLING_INTERVAL = 3000; // 3 seconds
-  const TIMEOUT_DURATION = 60000; // 60 seconds
-  const DELAY_DURATION = 180000; // 3 minutes
+  const DELAY_DURATION = 3000; // 3 seconds delay for simulation
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    let pollingId: NodeJS.Timeout;
-
-    const fetchTransactionAndPaymentStatus = async () => {
-      try {
-        // Fetch transaction ID from the backend
-        const response = await fetch(`/api/transaction`);
-        if (!response.ok) {
-          throw new Error(`Error fetching transaction ID: ${response.statusText}`);
-        }
-
-        const { transactionId } = await response.json();
-        if (!transactionId) {
-          throw new Error("Transaction ID not found.");
-        }
-
-        // Use the transaction ID to fetch the payment status
-        const statusResponse = await fetch(`/api/transaction?transactionId=${transactionId}`);
-        if (!statusResponse.ok) {
-          throw new Error(`Error fetching payment status: ${statusResponse.statusText}`);
-        }
-
-        const data = await statusResponse.json();
-        if (data.status === "success") {
-          setPaymentStatus("success");
-          clearCart(); // Clear cart on successful payment
-          clearTimeout(timeoutId);
-          clearInterval(pollingId);
-        } else {
-          setPaymentStatus("failed");
-        }
-      } catch{
-        clearTimeout(timeoutId);
-        clearInterval(pollingId);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const startPolling = () => {
-      pollingId = setInterval(() => {
-        fetchTransactionAndPaymentStatus();
-      }, POLLING_INTERVAL);
-
-      timeoutId = setTimeout(() => {
-        clearInterval(pollingId);
-        setLoading(false);
-        setError("Transaction processing took too long. Please try again later.");
-      }, TIMEOUT_DURATION);
-    };
-
-    const delayConfirmation = () => {
-      setTimeout(() => {
-        setLoading(false);
+    // Simulate a delay to mimic payment processing
+    const delayConfirmation = setTimeout(() => {
+      const isSuccess = Math.random() > 0.3; // Simulate random success/failure
+      if (isSuccess) {
         setPaymentStatus("success");
-      }, DELAY_DURATION);
-    };
-
-    startPolling();
-    delayConfirmation();
+        clearCart(); // Clear cart on success
+      } else {
+        setPaymentStatus("failed");
+      }
+      setLoading(false);
+    }, DELAY_DURATION);
 
     return () => {
-      clearInterval(pollingId);
-      clearTimeout(timeoutId);
+      clearTimeout(delayConfirmation);
     };
   }, [clearCart]);
 
@@ -120,11 +68,8 @@ export function PaymentConfirmation() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-24">
       <h2 className="text-2xl font-bold text-green-600">Processing Payment! Checkout the STK push on your device</h2>
-      <p className="mt-4 text-gray-600">
-        Your order has been received and is being prepared for packaging and delivery.
-      </p>
-      <div className="mt-8 bg-gray-50 rounded-lg p-6">
         <h3 className="text-xl font-semibold mb-4">Order</h3>
+
         {items.map((item) => (
           <div
             key={item.id}
@@ -141,7 +86,9 @@ export function PaymentConfirmation() {
                 KES {item.price} × {item.quantity}
               </p>
             </div>
-            <p className="font-semibold">KES {(item.price * item.quantity).toFixed(2)}</p>
+            <p className="font-semibold">
+              KES {(item.price * item.quantity).toFixed(2)}
+            </p>
           </div>
         ))}
         <div className="mt-6 flex justify-end">
@@ -153,6 +100,6 @@ export function PaymentConfirmation() {
           </button>
         </div>
       </div>
-    </div>
+    
   );
 }
