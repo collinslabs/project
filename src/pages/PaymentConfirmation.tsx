@@ -9,7 +9,7 @@ export function PaymentConfirmation() {
   const [paymentStatus, setPaymentStatus] = useState<null | "success" | "failed">(null);
   const [error] = useState<string | null>(null);
 
-  const DELAY_DURATION = 8000;
+  const DELAY_DURATION = 13000;
 
   useEffect(() => {
     const delayConfirmation = setTimeout(() => {
