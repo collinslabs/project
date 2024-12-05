@@ -9,7 +9,7 @@ export function PaymentConfirmation() {
   const [paymentStatus, setPaymentStatus] = useState<null | "success" | "failed">(null);
   const [error] = useState<string | null>(null);
 
-  const DELAY_DURATION = 3000; // 3 seconds delay for simulation
+  const DELAY_DURATION = 180000;
 
   useEffect(() => {
     const delayConfirmation = setTimeout(() => {
@@ -73,44 +73,47 @@ export function PaymentConfirmation() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-24 bg-pink-50 rounded-lg shadow-lg">
-      <h2 className="text-3xl font-bold text-pink-600 text-center mb-8">
-        Your Order is Being Processed
-      </h2>
-      <p className="text-center text-gray-600 mb-6">
-        Please check the STK push on your phone to complete the payment.
-      </p>
-      <div className="mb-8">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4"></h3>
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="flex items-center space-x-4 border-b py-4 last:border-0"
-          >
-            <img
-              src={item.image}
-              alt={item.name}
-              className="w-16 h-16 object-cover rounded-lg border border-pink-100 shadow-sm"
-            />
-            <div className="flex-1">
-              <h3 className="font-semibold text-gray-800">{item.name}</h3>
-              <p className="text-pink-500">
-                KES {item.price} × {item.quantity}
-              </p>
-            </div>
-            <p className="font-semibold text-gray-700">
-              KES {(item.price * item.quantity).toFixed(2)}
-            </p>
-          </div>
-        ))}
+  <h2 className="text-3xl font-bold text-pink-600 text-center mb-8">
+    Your Order is Being Processed
+  </h2>
+  <p className="text-center text-gray-600 mb-6">
+    Please check the STK push on your phone to complete the payment.
+  </p>
+  <h3 className="text-xl font-semibold text-gray-800 text-center mb-6">
+    Once your payment is successful, you will receive an SMS to track your order.
+  </h3>
+  <div className="mb-8">
+    {items.map((item) => (
+      <div
+        key={item.id}
+        className="flex items-center space-x-4 border-b py-4 last:border-0"
+      >
+        <img
+          src={item.image}
+          alt={item.name}
+          className="w-16 h-16 object-cover rounded-lg border border-pink-100 shadow-sm"
+        />
+        <div className="flex-1">
+          <h3 className="font-semibold text-gray-800">{item.name}</h3>
+          <p className="text-pink-500">
+            KES {item.price} × {item.quantity}
+          </p>
+        </div>
+        <p className="font-semibold text-gray-700">
+          KES {(item.price * item.quantity).toFixed(2)}
+        </p>
       </div>
-      <div className="flex justify-center">
-        <button
-          className="px-8 py-3 bg-pink-500 text-white rounded-full hover:bg-pink-600 shadow-lg transition"
-          onClick={() => navigate("/")}
-        >
-          Return to Home
-        </button>
-      </div>
-    </div>
+    ))}
+  </div>
+  <div className="flex justify-center">
+    <button
+      className="px-8 py-3 bg-pink-500 text-white rounded-full hover:bg-pink-600 shadow-lg transition"
+      onClick={() => navigate("/")}
+    >
+      Return to Home
+    </button>
+  </div>
+</div>
+
   );
 }
