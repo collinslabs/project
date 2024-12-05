@@ -100,6 +100,6 @@ export function PaymentConfirmation() {
           </button>
         </div>
       </div>
-    </div>
+
   );
 }
