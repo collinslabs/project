@@ -70,7 +70,7 @@ const slides = [
   {
     id: 1,
     image: "https://images.unsplash.com/photo-1593526659358-5f1489f8efa2?w=294&dpr=1&h=294&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXRodW1ibmFpbHx8OTkwMTUyNXx8ZW58MHx8fHx8",
-    title: "Welcome to ShopHub",
+    title: "Welcome to SensaLuxe",
     description: "Explore our exclusive collection of thoughtfully curated,premium products designed to enhance your pleasure and well-being. Each item is carefully selected for its quality, safety, and sophistication.",
     link: "/products",
     callToAction: "Browse Our Curated Selection Now"
@@ -546,7 +546,7 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">About ShopHub</h3>
+              <h3 className="text-lg font-semibold mb-4">About SensaLuxe</h3>
               <p className="text-gray-400">Your trusted destination for high-quality, thoughtfully designed products that prioritize your comfort, pleasure, and personal well-being. Explore a curated selection of premium items, all crafted with care and discretion to enhance your intimate experiences.</p>
               <div className="flex space-x-4 mt-4">
                 <a href="#" className="hover:text-pink-400 transition-colors">
