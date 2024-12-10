@@ -13,11 +13,16 @@ import { ForgotPassword } from "./components/FogortPasword";
 import AccountSettings from "./pages/AccountSettings";
 import { PaymentConfirmation } from "./pages/PaymentConfirmation";
 import { ProtectedRoute } from "./lib/ProtectedRoute";
+import CookieConsent from "./components/cookies";
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
+      <CookieConsent 
+        onAccept={() => console.log('Cookies accepted')}
+        onReject={() => console.log('Cookies rejected')}
+      />
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
