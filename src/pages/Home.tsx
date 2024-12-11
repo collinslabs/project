@@ -617,7 +617,7 @@ const Home: React.FC = () => {
         </div>
       </footer>
       <div className="fixed bottom-4 right-4">
-           <a href="https://wa.me/+254755726453" className="flex items-center bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-300">
+           <a href="https://wa.me/" className="flex items-center bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-300">
           <span>Whatsapp us</span>
           <ChevronRight className="ml-2" size={20} />
           </a>

@@ -5,7 +5,6 @@ import path from 'path';
 const generateSitemap = () => {
     const urls = [
         { loc: '/', lastmod: new Date().toISOString() },
-        { loc: '/about', lastmod: new Date().toISOString() },
         // Add more URLs as needed
     ];
 
@@ -21,7 +20,7 @@ const generateSitemap = () => {
     </urlset>
     `.trim();
 
-    fs.writeFileSync(path.join(__dirname, '../dist/sitemap.xml'), sitemapXml);
+    fs.writeFileSync(path.join(__dirname, '../scripts/sitemap.xml'), sitemapXml);
 };
 
 generateSitemap();
