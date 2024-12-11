@@ -549,14 +549,15 @@ const Home: React.FC = () => {
               <h3 className="text-lg font-semibold mb-4">About SensaLuxe</h3>
               <p className="text-gray-400">Your trusted destination for high-quality, thoughtfully designed products that prioritize your comfort, pleasure, and personal well-being. Explore a curated selection of premium items, all crafted with care and discretion to enhance your intimate experiences.</p>
               <div className="flex space-x-4 mt-4">
-                <a href="#" className="hover:text-pink-400 transition-colors">
-                  <Facebook className="h-5 w-5" />
+                <a href="https://www.instagram.com/sensaluxe?igsh=MWJjZ3U4eHcxMHhm" className="hover:text-pink-400 transition-colors">
+                  <Instagram className="h-5 w-5" />
+                  
                 </a>
                 <a href="#" className="hover:text-pink-400 transition-colors">
                   <Twitter className="h-5 w-5" />
                 </a>
                 <a href="#" className="hover:text-pink-400 transition-colors">
-                  <Instagram className="h-5 w-5" />
+                <Facebook className="h-5 w-5" />
                 </a>
               </div>
             </div>
@@ -615,6 +616,12 @@ const Home: React.FC = () => {
           </div>
         </div>
       </footer>
+      <div className="fixed bottom-4 right-4">
+           <a href="https://wa.me/+254755726453" className="flex items-center bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-300">
+          <span>Whatsapp us</span>
+          <ChevronRight className="ml-2" size={20} />
+          </a>
+        </div>
     </div>
   );
 };
