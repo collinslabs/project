@@ -20,7 +20,7 @@ export function Admin() {
     price: 0,
     image: '',
     description: '',
-    category: 'vibrators',
+    category: '',
     features: [],
     addedBy: 'collinsyegon816@gmail.com',
   });
@@ -80,7 +80,7 @@ export function Admin() {
         price: 0,
         image: '',
         description: '',
-        category: 'vibrators',
+        category: '',
         features: [],
         addedBy: 'collinsyegon816@gmail.com',
       });
