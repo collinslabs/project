@@ -9,7 +9,7 @@ export function PaymentConfirmation() {
   const [paymentStatus, setPaymentStatus] = useState<null | "success" | "failed">(null);
   const [error] = useState<string | null>(null);
 
-  const DELAY_DURATION = 13000;
+  const DELAY_DURATION = 10000;
 
   useEffect(() => {
     const delayConfirmation = setTimeout(() => {
@@ -46,7 +46,7 @@ export function PaymentConfirmation() {
         <p className="mt-4 text-gray-600">{error}</p>
         <button
           className="mt-6 px-6 py-3 bg-pink-500 text-white rounded-full hover:bg-pink-600 shadow-lg"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/checkout")}
         >
           Return to Checkout
         </button>
