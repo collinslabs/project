@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { collection, addDoc, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Loader } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 interface Product {
   id?: string;
@@ -30,7 +29,7 @@ export function Admin() {
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState(false);
-  const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -90,7 +89,6 @@ export function Admin() {
 
       // Redirect to /products with a timeout after successful product addition
       setTimeout(() => {
-        navigate('/products');
       }, 2000); // Timeout of 2 seconds before redirecting
     } catch (error: unknown) {
       if (error instanceof Error) {

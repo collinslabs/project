@@ -11,5 +11,6 @@ export default defineConfig({
     outDir: 'dist',
     // Ensure the sitemap is copied to the build directory
     copyPublicDir: true
-  }
+  },
+  
 });
