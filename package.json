@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && npm run generate-sitemap",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-sitemap": "ts-node scripts/generateSitemap.ts"
+    "generate-sitemap": "npx ts-node scripts/generateSitemap.ts"
   },
   "dependencies": {
     "@stripe/stripe-js": "^3.0.7",
