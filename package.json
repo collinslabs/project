@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-sitemap": "npx ts-node scripts/generateSitemap.ts"
+    "generate-sitemap": "ts-node scripts/generateSitemap.ts"
   },
   "dependencies": {
     "@stripe/stripe-js": "^3.0.7",
@@ -17,13 +17,16 @@
     "express": "^4.21.1",
     "firebase": "^10.14.1",
     "framer-motion": "^11.11.17",
+    "fs": "^0.0.1-security",
     "lucide-react": "^0.344.0",
     "modern-ecommerce": "file:",
+    "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-firebase-hooks": "^5.1.1",
     "react-router-dom": "^6.28.0",
     "react-scroll": "^1.9.0",
+    "stream": "^0.0.3",
     "swiper": "^11.1.15",
     "tailwind-merge": "^2.2.1",
     "zustand": "^4.5.2"

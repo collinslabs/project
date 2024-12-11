@@ -1,48 +1,27 @@
-// scripts/generateSitemap.ts
-import { SitemapStream } from 'sitemap';
-import { Readable } from 'stream';
+// src/generateSitemap.ts
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const generateSitemap = () => {
+    const urls = [
+        { loc: '/', lastmod: new Date().toISOString() },
+        { loc: '/about', lastmod: new Date().toISOString() },
+        // Add more URLs as needed
+    ];
 
-const urls = [
-  { url: '/', changefreq: 'daily', priority: 1.0 },
-  // Add all your website routes here
-];
+    const sitemapXml = `
+    <?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap-image/1.1">
+        ${urls.map(url => `
+            <url>
+                <loc>${url.loc}</loc>
+                <lastmod>${url.lastmod}</lastmod>
+            </url>
+        `).join('')}
+    </urlset>
+    `.trim();
 
-async function generateSitemap() {
-  try {
-    const stream = new SitemapStream({ hostname: 'https://sensaluxe.store' });
-    
-    // Create a promise to handle the stream
-    const data = await new Promise<Buffer>((resolve, reject) => {
-      const chunks: Buffer[] = [];
-      Readable.from(urls).pipe(stream)
-        .on('data', chunk => chunks.push(Buffer.from(chunk)))
-        .on('error', reject)
-        .on('end', () => resolve(Buffer.concat(chunks)));
-    });
-
-    // Ensure public directory exists
-    const publicDir = path.resolve(__dirname, '../public');
-    if (!fs.existsSync(publicDir)) {
-      fs.mkdirSync(publicDir, { recursive: true });
-    }
-
-    // Write sitemap
-    fs.writeFileSync(
-      path.resolve(publicDir, 'sitemap.xml'),
-      data
-    );
-
-    console.log('✅ Sitemap generated successfully!');
-  } catch (error) {
-    console.error('Error generating sitemap:', error);
-    process.exit(1);
-  }
-}
+    fs.writeFileSync(path.join(__dirname, '../dist/sitemap.xml'), sitemapXml);
+};
 
 generateSitemap();
