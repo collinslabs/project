@@ -7,4 +7,9 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    outDir: 'dist',
+    // Ensure the sitemap is copied to the build directory
+    copyPublicDir: true
+  }
 });
